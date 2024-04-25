@@ -1,40 +1,50 @@
 public class Neuron{
     private int neuronIndex;
     private int layerIndex;
-    private double[] weights;
+    private double[] inWeights;
     private double output;
     
     public Neuron(int layerIndex, int neuronIndex, int numInputs){
         this.layerIndex = layerIndex;
         this.neuronIndex = neuronIndex;
-        weights = new double[numInputs];
+        inWeights = new double[numInputs];
+        /* inicializa o neurônio
+         * percorre o vetor de pesos de entrada e inicializa cada peso com um valor aleatório
+         * entre -1.0 e 1.0
+         */
         for (int i = 0; i < numInputs; i++){
-            weights[i] = Math.random() - 0.5; // inicialização aleatória entre -0.5 e 0.5
+            inWeights[i] = Math.random() - 1.0;
         }
     }
     
-    public double calculateOutput(double[] inputs){
+    double calculateOutput(double[] inputs){
         double sum = 0;
+        /* calcula a saída do neurônio
+         * percorre o vetor de pesos de entrada e multiplica cada peso pelo respectivo input
+         * soma o resultado
+         * aplica a função de ativação (sigmoid) ao resultado da soma
+         */
         for (int i = 0; i < inputs.length; i++){
-            sum += inputs[i] * weights[i];
+            sum += inputs[i] * inWeights[i];
         }
-        output = sigmoid(sum); // função de ativação (sigmoid)
+        output = sigmoid(sum);
         return output;
     }
     
-    private double sigmoid(double x){
+    /* função de ativação (sigmoid) */
+    double sigmoid(double x){
         return 1 / (1 + Math.exp(-x));
     }
 
     public double[] getWeights(){
-        return weights;
+        return inWeights;
     }
     
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("  Neuron ").append(neuronIndex).append(" weights: ");
-        for (double weight : weights){
+        sb.append("  Neuron ").append(neuronIndex).append(" in-weights: ");
+        for (double weight : inWeights){
             sb.append(weight).append(" ");
         }
         sb.append("\n");
