@@ -7,18 +7,19 @@ public class Neuron{
     public Neuron(int layerIndex, int neuronIndex, int numInputs){
         this.layerIndex = layerIndex;
         this.neuronIndex = neuronIndex;
-        inWeights = new double[numInputs];
+        inWeights = new double[numInputs + 1]; // +1 para o bias
         /* inicializa o neurônio
-         * percorre o vetor de pesos de entrada e inicializa cada peso com um valor aleatório
+         * percorre o vetor de pesos de entrada (+ bias)
+         * e inicializa cada um com um valor aleatório
          * entre -1.0 e 1.0
          */
-        for (int i = 0; i < numInputs; i++){
+        for (int i = 0; i < numInputs + 1; i++){
             inWeights[i] = Math.random() - 1.0;
         }
     }
     
     double calculateOutput(double[] inputs){
-        double sum = 0;
+        double sum = inWeights[inWeights.length - 1]; // somando o bias
         /* calcula a saída do neurônio
          * percorre o vetor de pesos de entrada e multiplica cada peso pelo respectivo input
          * soma o resultado
@@ -43,9 +44,13 @@ public class Neuron{
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("  Neuron ").append(neuronIndex).append(" in-weights: ");
-        for (double weight : inWeights){
-            sb.append(weight).append(" ");
+        sb.append("  NEURON ").append(neuronIndex).append("\n");
+        for (int i = 0; i < inWeights.length; i++){
+            if (i == inWeights.length - 1) {
+                sb.append("bias: ").append(inWeights[i]).append("\n");
+            } else {
+                sb.append("in-weight ").append(i + 1).append(": ").append(inWeights[i]).append("\n");
+            }
         }
         sb.append("\n");
         return sb.toString();

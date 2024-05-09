@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class ImageProcessor{
+public class LetterProcessor{
 
     private NeuralNetwork neuralNetwork;
 
@@ -10,12 +10,13 @@ public class ImageProcessor{
         // Input layer size = 120, hidden layer = 60, output layer = 26
         int[] layerSizes = {120, 60, 26};
         NeuralNetwork neuralNetwork = new NeuralNetwork(layerSizes);
-        ImageProcessor imageProcessor = new ImageProcessor(neuralNetwork);
+        LetterProcessor imageProcessor = new LetterProcessor(neuralNetwork);
         String filePath = System.getProperty("user.dir") + "/files/conjunto-dados/teste-x.txt";
         imageProcessor.processImages(filePath);
+        neuralNetwork.printOutputs();
     }
 
-    public ImageProcessor(NeuralNetwork neuralNetwork){
+    public LetterProcessor(NeuralNetwork neuralNetwork){
         this.neuralNetwork = neuralNetwork;
     }
 
@@ -25,7 +26,6 @@ public class ImageProcessor{
             while ((line = br.readLine()) != null){
                 double[] inputs = parseInputLine(line);
                 double[] outputs = neuralNetwork.getOutputs(inputs);
-                printOutputs(outputs);
             }
         } catch (IOException e){
             e.printStackTrace();
@@ -39,13 +39,5 @@ public class ImageProcessor{
             inputs[i] = Double.parseDouble(values[i].trim());
         }
         return inputs;
-    }
-
-    private void printOutputs(double[] outputs){
-        System.out.println("---- outputs ----");
-        for (double output : outputs){
-            System.out.println(output);
-        }
-        System.out.println();
     }
 }

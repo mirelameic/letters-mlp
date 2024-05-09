@@ -40,10 +40,11 @@ public class Layer{
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("-> Layer ").append(layerIndex).append(":\n");
+        sb.append("------> LAYER ").append(layerIndex).append("\n");
         for (Neuron neuron : neurons){
             sb.append(neuron.toString());
         }
+        sb.append("\n");
         return sb.toString();
     }
 }
