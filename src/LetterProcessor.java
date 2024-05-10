@@ -8,8 +8,8 @@ public class LetterProcessor{
 
     public static void main(String[] args){
         // Input layer size = 120, hidden layer = 60, output layer = 26
-        int[] layerSizes = {120, 60, 26};
-        NeuralNetwork neuralNetwork = new NeuralNetwork(layerSizes);
+        int[] layerInfo = {120, 60, 26};
+        NeuralNetwork neuralNetwork = new NeuralNetwork(layerInfo);
         LetterProcessor imageProcessor = new LetterProcessor(neuralNetwork);
         String filePath = System.getProperty("user.dir") + "/files/conjunto-dados/teste-x.txt";
         imageProcessor.processImages(filePath);

@@ -5,9 +5,10 @@ public class Layer{
     public Layer(int layerIndex, int numNeurons, int numInputsPerNeuron){
         this.layerIndex = layerIndex;
         neurons = new Neuron[numNeurons];
-        /* inicializa as camadas
-         * criando cada neurônio 
-         * com o indice da camada que ele está, o indice do neuronio e o número de inputs
+        /* inicializa a camada criando cada neurônio com:
+         * o indice da camada que ele está
+         * o indice do neuronio
+         * e o número de inputs que ele vai ter
          */
         for (int i = 0; i < numNeurons; i++){
             neurons[i] = new Neuron(layerIndex, i, numInputsPerNeuron);
@@ -17,7 +18,7 @@ public class Layer{
     double[] calculateOutputs(double[] inputs){
         double[] outputs = new double[neurons.length];
         /* calcula a saída de cada neurônio da camada
-         * se a camada for a camada de entrada, o input é um vetor de tamanho 1
+         * se for a camada de entrada, o input de cada neurônio é apenas 1 valor enviado na chamada do método
          * se não, o input é o vetor de saída da camada anterior
          */
         if (layerIndex == 0){
