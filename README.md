@@ -5,21 +5,21 @@ O projeto consiste na implementação de uma rede neural artificial do tipo Mult
 
 ## Estrutura
 
-- `src`: arquivos .java da estrutura da rede neural
-- `files`: arquivos que serão usados no treinamento e processamento da rede neural
-- `run`: arquivos .java que fazem o treinamento da rede
-- `bin`: arquivos .class
+- `src`: arquivos .java da estrutura da rede neural.
+- `files`: arquivos que serão usados no treinamento e processamento da rede neural.
+- `run`: arquivos .java que fazem o treinamento da rede.
+- `bin`: arquivos .class.
 
 ## Classes
 
 ### Neuron
 A classe `Neuron` representa um neurônio da uma rede neural. Ele armazena os pesos das conexões entre este neurônio e os neurônios da camada anterior, seu bias e a saída calculada.
 - **Atributos**:
-  - `neuronIndex`: Índice do neurônio na camada
-  - `layerIndex`: Índice da camada a qual o neurônio pertence
-  - `inWeights`: Array de pesos de entrada do neurônio
-  - `bias`: Bias do neurônio
-  - `output`: Saída do neurônio após o método `calculateOutput`
+  - `neuronIndex`: Índice do neurônio na camada.
+  - `layerIndex`: Índice da camada a qual o neurônio pertence.
+  - `inWeights`: Array de pesos de entrada do neurônio.
+  - `bias`: Bias do neurônio.
+  - `output`: Saída do neurônio após o método `calculateOutput`.
 
 - **Métodos**:
   - `Neuron(int layerIndex, int neuronIndex, int numInputs)`: Construtor para inicializar os neurônios com pesos aleatórios.
@@ -29,8 +29,8 @@ A classe `Neuron` representa um neurônio da uma rede neural. Ele armazena os pe
 ### Layer
 A classe `Layer` representa uma camada da rede neural. Cada camada possui um índice próprio e um conjunto de neurônios.
 - **Atributos**:
-  - `layerIndex`: Índice da camada
-  - `neurons`: Array de neurônios na camada
+  - `layerIndex`: Índice da camada.
+  - `neurons`: Array de neurônios na camada.
 
 - **Métodos**:
   - `Layer(int layerIndex, int numNeurons, int numInputsPerNeuron)`: Construtor para inicializar a camada e os seus neurônios.
@@ -39,7 +39,7 @@ A classe `Layer` representa uma camada da rede neural. Cada camada possui um ín
 ### NeuralNetwork
 A classe `NeuralNetwork` representa toda a estrutura da rede neural, composta por várias camadas e vários neurônios dentro de cada camada. Ela contém um array de `Layer`, um array com as informações de inicialização e um array com os outputs finais da rede neural. Também fornece métodos para realizar o treinamento e processamento da rede neural.
 - **Atributos**:
-  - `layers`: Array de camadas na rede neural
+  - `layers`: Array de camadas na rede neural.
   - `layerInfo`: Array que foi utilizado pra inicializar a rede. Cada elemento `i` representa uma camada e cada valor representa a quantidade de neurônios que a camada terá.
   - `finalOutputs`: Array de outputs finais após a entrada de determinado dado na rede neural.
 
