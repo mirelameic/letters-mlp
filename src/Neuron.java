@@ -33,7 +33,7 @@ public class Neuron{
         System.out.println(" LAYER " + layerIndex + " NEURON " + neuronIndex);
         System.out.println("sum: " + sum);
 
-        output = sigmoid(sum);
+        this.output = sigmoid(sum);
         System.out.println("output: " + output);
         System.out.println();
         System.out.println();
