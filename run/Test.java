@@ -7,7 +7,7 @@ public class Test{
 
         /* 2 dados de entrada = 0.5, 1.0 */
         double[] inputs = {0.5, 1};
-        neuralNetwork.getOutputs(inputs);
+        neuralNetwork.runFeedForward(inputs);
         neuralNetwork.printOutputs();
     }
 }

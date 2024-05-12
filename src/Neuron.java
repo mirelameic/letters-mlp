@@ -4,6 +4,7 @@ public class Neuron{
     private double[] inWeights;
     private double bias;
     private double output;
+    //private double error;
     
     public Neuron(int layerIndex, int neuronIndex, int numInputs){
         this.layerIndex = layerIndex;
@@ -30,23 +31,47 @@ public class Neuron{
         for (int i = 0; i < inputs.length; i++){
             sum += inputs[i] * inWeights[i];
         }
-        System.out.println(" LAYER " + layerIndex + " NEURON " + neuronIndex);
-        System.out.println("sum: " + sum);
-
         this.output = sigmoid(sum);
-        System.out.println("output: " + output);
-        System.out.println();
-        System.out.println();
+        printOutputInfo(sum);
         return output;
     }
+
+    /* derivada da Sigmoid para determinado output */
+    public double sigmoidDerivative(){
+        return output * (1 - output);
+    }
     
-    /* função de ativação (sigmoid) */
+    /* função de ativação Sigmoid */
     double sigmoid(double x){
         return 1 / (1 + Math.exp(-x));
     }
 
-    public double[] getWeights(){
+    public double[] getInWeights(){
         return inWeights;
+    }
+
+    public double getBias(){
+        return bias;
+    }
+
+    public void setBias(double bias){
+        this.bias = bias;
+    }
+
+    // public double getError(){
+    //     return error;
+    // }
+
+    // public void setError(double error){
+    //     this.error = error;
+    // }
+
+    private void printOutputInfo(double sum){
+        System.out.println(" LAYER " + layerIndex + " NEURON " + neuronIndex);
+        System.out.println("sum: " + sum);
+        System.out.println("output: " + output);
+        System.out.println();
+        System.out.println();
     }
     
     @Override

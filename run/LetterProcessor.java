@@ -25,7 +25,7 @@ public class LetterProcessor{
             String line;
             while ((line = br.readLine()) != null){
                 double[] inputs = parseInputLine(line);
-                double[] outputs = neuralNetwork.getOutputs(inputs);
+                double[] outputs = neuralNetwork.runFeedForward(inputs);
             }
         } catch (IOException e){
             e.printStackTrace();
