@@ -1,6 +1,7 @@
 public class Layer{
     private int layerIndex;
     private Neuron[] neurons;
+    private double[] recievedInputs;
     private double[] outputs;
     private Layer previousLayer;
     private Layer nextLayer;
@@ -24,51 +25,61 @@ public class Layer{
         }
     }
 
-    // double[] backpropagate(double[] outputErrors){
-    //     double[] errors = new double[neurons.length];
-        
-    //     if (nextLayer == null){
-    //         // Camada de saída
-    //         for (int i = 0; i < neurons.length; i++){
-    //             errors[i] = outputErrors[i] * neurons[i].sigmoidDerivative(); // Gradient
-    //         }
-    //     }else{
-    //         // Camada oculta
-    //         for (int i = 0; i < neurons.length; i++){
-    //             double error = 0.0;
-    //             for (Neuron neuron : nextLayer.getNeurons()){
-    //                 error += neuron.getInWeights()[i] * neuron.getError();
-    //             }
-    //             errors[i] = error * neurons[i].sigmoidDerivative(); // Gradient
-    //         }
-    //     }
-    //     return errors;
-    // }
+    double[] backpropagate(double[] outputErrors){
+        double[] errors = new double[neurons.length];
+        if (nextLayer == null){
+            /* na camada de saída,
+             * o erro local de cada neurônio é o erro da saída * a derivada da sigmoid
+             */
+            for (int i = 0; i < neurons.length; i++){
+                errors[i] = outputErrors[i] * neurons[i].sigmoidDerivative();
+                neurons[i].setError(errors[i]);
+            }
+        }else{
+            /* nas camadas ocultas,
+             * o erro local de cada neurônio é a soma dos erros dos neurônios da camada seguinte
+             * multiplicado pelo peso da conexão entre eles * a derivada da sigmoid
+             */
+            for (int i = 0; i < neurons.length; i++){
+                double error = 0.0;
+                for (Neuron nextNeuron : nextLayer.getNeurons()){
+                    error += nextNeuron.getInWeights()[i] * nextNeuron.getError();
+                }
+                error *= neurons[i].sigmoidDerivative();
+                neurons[i].setError(error);
+                errors[i] = error;
+            }
+        }
+        return errors;
+    }
 
-    // void updateWeights(double learningRate){
-    //     for (Neuron neuron : neurons){
-    //         double[] inputs = previousLayer != null ? previousLayer.getOutputs() : new double[]{1.0}; // Add bias or inputs from previous layer
-    //         for (int i = 0; i < neuron.getInWeights().length; i++){
-    //             neuron.getInWeights()[i] += learningRate * neuron.getError() * inputs[i];
-    //         }
-    //         neuron.setBias(neuron.getBias() + learningRate * neuron.getError()); // Update bias
-    //     }
-    // }
+    void updateWeightsAndBiases(double learningRate){
+        /* atualiza os pesos e bias de cada neurônio da camada
+         * com base no learning rate fornecido, no erro calculado no backpropagation
+         * e nos valores de entrada da camada no feedforward
+         */
+        for (Neuron neuron : neurons){
+            for (int i = 0; i < neuron.getInWeights().length; i++){
+                double oldWeight = neuron.getInWeights()[i];
+                double newWeight = oldWeight + learningRate * neuron.getError() * recievedInputs[i];
+                neuron.updateWeight(i, newWeight);
+            }
+            neuron.setBias(neuron.getBias() + learningRate * neuron.getError());
+        }
+    }
 
     double[] calculateOutputSquaredErrors(double[] expectedOutputs){
         this.outputSquaredErrors = new double[expectedOutputs.length];
-        /* calcula o erro quadrático de cada neurônio da camada de saída
-         * e setta ele no neurônio
-         */
+        /* calcula o erro quadrático de cada neurônio da camada de saída */
         for (int i = 0; i < neurons.length; i++){
             double error = expectedOutputs[i] - neurons[i].getOutput();
             outputSquaredErrors[i] = Math.pow(error, 2);
-            neurons[i].setError(outputSquaredErrors[i]);
         }
         return outputSquaredErrors;
     }
     
     double[] calculateOutputs(double[] inputs){
+        this.recievedInputs = inputs;
         this.outputs = new double[neurons.length];
         /* calcula a saída de cada neurônio da camada
          * se for a camada de entrada, o input de cada neurônio é apenas 1 valor enviado na chamada do método

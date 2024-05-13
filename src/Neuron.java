@@ -36,7 +36,7 @@ public class Neuron{
         return output;
     }
 
-    /* derivada da Sigmoid em relação ao somatório */
+    /* derivada da Sigmoid em relação a saída já calculada */
     public double sigmoidDerivative(){
         return output * (1 - output);
     }
@@ -48,6 +48,10 @@ public class Neuron{
 
     public double[] getInWeights(){
         return inWeights;
+    }
+
+    public void updateWeight(int index, double weight){
+        this.inWeights[index] = weight;
     }
 
     public double getBias(){

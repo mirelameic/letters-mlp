@@ -13,8 +13,9 @@ public class Test{
 
         /* calculo do erro com base nos resultados esperados */
         double[] expectedOutputs = {0.3, 0.1};
-        Layer[] test = neuralNetwork.getLayers();
-        test[2].calculateOutputSquaredErrors(expectedOutputs);
-        test[2].printOutputSquarredErrors();
+        // Layer[] test = neuralNetwork.getLayers();
+        // test[2].calculateOutputSquaredErrors(expectedOutputs);
+        // test[2].printOutputSquarredErrors();
+        neuralNetwork.runBackpropagation(expectedOutputs, 0.1);
     }
 }
