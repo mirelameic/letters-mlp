@@ -4,7 +4,7 @@ public class Neuron{
     private double[] inWeights;
     private double bias;
     private double output;
-    //private double error;
+    private double error;
     
     public Neuron(int layerIndex, int neuronIndex, int numInputs){
         this.layerIndex = layerIndex;
@@ -36,7 +36,7 @@ public class Neuron{
         return output;
     }
 
-    /* derivada da Sigmoid para determinado output */
+    /* derivada da Sigmoid em relação ao somatório */
     public double sigmoidDerivative(){
         return output * (1 - output);
     }
@@ -58,13 +58,17 @@ public class Neuron{
         this.bias = bias;
     }
 
-    // public double getError(){
-    //     return error;
-    // }
+    public double getOutput(){
+        return output;
+    }
 
-    // public void setError(double error){
-    //     this.error = error;
-    // }
+    public double getError(){
+        return error;
+    }
+
+    public void setError(double error){
+        this.error = error;
+    }
 
     private void printOutputInfo(double sum){
         System.out.println(" LAYER " + layerIndex + " NEURON " + neuronIndex);

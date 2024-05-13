@@ -4,6 +4,7 @@ public class Layer{
     private double[] outputs;
     private Layer previousLayer;
     private Layer nextLayer;
+    double[] outputSquaredErrors;
     
     public Layer(int layerIndex, int numNeurons, int numInputsPerNeuron, Layer previousLayer, Layer nextLayer){
         this.layerIndex = layerIndex;
@@ -23,7 +24,7 @@ public class Layer{
         }
     }
 
-    // public double[] backpropagate(double[] outputErrors){
+    // double[] backpropagate(double[] outputErrors){
     //     double[] errors = new double[neurons.length];
         
     //     if (nextLayer == null){
@@ -44,7 +45,7 @@ public class Layer{
     //     return errors;
     // }
 
-    // public void updateWeights(double learningRate){
+    // void updateWeights(double learningRate){
     //     for (Neuron neuron : neurons){
     //         double[] inputs = previousLayer != null ? previousLayer.getOutputs() : new double[]{1.0}; // Add bias or inputs from previous layer
     //         for (int i = 0; i < neuron.getInWeights().length; i++){
@@ -53,6 +54,19 @@ public class Layer{
     //         neuron.setBias(neuron.getBias() + learningRate * neuron.getError()); // Update bias
     //     }
     // }
+
+    double[] calculateOutputSquaredErrors(double[] expectedOutputs){
+        this.outputSquaredErrors = new double[expectedOutputs.length];
+        /* calcula o erro quadrático de cada neurônio da camada de saída
+         * e setta ele no neurônio
+         */
+        for (int i = 0; i < neurons.length; i++){
+            double error = expectedOutputs[i] - neurons[i].getOutput();
+            outputSquaredErrors[i] = Math.pow(error, 2);
+            neurons[i].setError(outputSquaredErrors[i]);
+        }
+        return outputSquaredErrors;
+    }
     
     double[] calculateOutputs(double[] inputs){
         this.outputs = new double[neurons.length];
@@ -106,5 +120,13 @@ public class Layer{
         }
         sb.append("\n");
         return sb.toString();
+    }
+
+    public void printOutputSquarredErrors(){
+        System.out.println("---- OUTPUT SQUARED ERRORS ----");
+        for (double error : outputSquaredErrors){
+            System.out.println(error);
+        }
+        System.out.println();
     }
 }
