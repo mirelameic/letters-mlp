@@ -35,7 +35,7 @@ public class NeuralNetwork{
         for (int i = layers.length - 1; i >= 0; i--){
             errors = layers[i].backpropagate(errors);
         }
-
+        
         for (Layer layer : layers){
             layer.updateWeightsAndBiases(learningRate);
         }
@@ -117,5 +117,9 @@ public class NeuralNetwork{
 
     public Layer[] getLayers(){
         return layers;
+    }
+
+    public double getMSE(){
+        return MSE;
     }
 }

@@ -61,10 +61,10 @@ public class Layer{
         for (Neuron neuron : neurons){
             for (int i = 0; i < neuron.getInWeights().length; i++){
                 double oldWeight = neuron.getInWeights()[i];
-                double newWeight = oldWeight + learningRate * neuron.getError() * recievedInputs[i];
+                double newWeight = oldWeight - learningRate * neuron.getError() * recievedInputs[i];
                 neuron.updateWeight(i, newWeight);
             }
-            neuron.setBias(neuron.getBias() + learningRate * neuron.getError());
+            neuron.setBias(neuron.getBias() - learningRate * neuron.getError());
         }
     }
 

@@ -32,7 +32,7 @@ public class Neuron{
             sum += inputs[i] * inWeights[i];
         }
         this.output = sigmoid(sum);
-        printOutputInfo(sum);
+        //printOutputInfo(sum);
         return output;
     }
 
