@@ -32,7 +32,7 @@ public class NeuralNetwork{
          * e atualiza os pesos e bias em todas as camadas
          */
         double[] errors = layers[layers.length - 1].calculateOutputSquaredErrors(expectedOutputs);
-        for (int i = layers.length - 1; i >= 0; i--){
+        for (int i = layers.length - 1; i > 0; i--){
             errors = layers[i].backpropagate(errors);
         }
         
