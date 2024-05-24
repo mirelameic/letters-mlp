@@ -31,14 +31,14 @@ public class NeuralNetwork{
          * propaga o erro de volta para as camadas ocultas
          * e atualiza os pesos e bias em todas as camadas
          */
-        double[] errors = layers[layers.length - 1].calculateOutputSquaredErrors(expectedOutputs);
+        calculateMSE(expectedOutputs);
         for (int i = layers.length - 1; i > 0; i--){
-            errors = layers[i].backpropagate(errors);
+            layers[i].backpropagate(expectedOutputs);
         }
         
-        for (Layer layer : layers){
-            layer.updateWeightsAndBiases(learningRate);
-        }
+        // for (int i = 1; i < layers.length; i++){
+        //     layers[i].updateWeightsAndBiases(learningRate);
+        // }
     }
 
     private double[] feedForward(double[] inputs){
@@ -67,9 +67,13 @@ public class NeuralNetwork{
         double sumSquaredErrors = 0.0;
         for (int i = 0; i < finalOutputs.length; i++){
             double error = expectedOutputs[i] - finalOutputs[i];
+            System.out.println("Error: " + error);
             sumSquaredErrors += Math.pow(error, 2);
+            System.out.println("Sum squared errors: " + sumSquaredErrors);
         }
         this.MSE = sumSquaredErrors / finalOutputs.length;
+        System.out.println("MSE: " + MSE);
+        System.out.println();
     }
 
     public void runBackpropagation(double[] expectedOutputs, double learningRate){
@@ -84,6 +88,14 @@ public class NeuralNetwork{
             throw new IllegalArgumentException("Number of inputs must be equal to number of neurons in input-layer");
         }
         return feedForward(inputs);
+    }
+
+    public Layer[] getLayers(){
+        return layers;
+    }
+    
+    public double getMSE(){
+        return MSE;
     }
 
     @Override
@@ -113,13 +125,5 @@ public class NeuralNetwork{
             System.out.println("Next Layer: " + (currentLayer.getNextLayer() != null ? currentLayer.getNextLayer().getLayerIndex() : "null"));
             System.out.println();
         }
-    }
-
-    public Layer[] getLayers(){
-        return layers;
-    }
-
-    public double getMSE(){
-        return MSE;
     }
 }

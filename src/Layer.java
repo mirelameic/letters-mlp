@@ -5,7 +5,6 @@ public class Layer{
     private double[] outputs;
     private Layer previousLayer;
     private Layer nextLayer;
-    double[] outputSquaredErrors;
     
     public Layer(int layerIndex, int numNeurons, int numInputsPerNeuron, Layer previousLayer, Layer nextLayer){
         this.layerIndex = layerIndex;
@@ -25,58 +24,41 @@ public class Layer{
         }
     }
 
-    double[] backpropagate(double[] outputErrors){
-        double[] errors = new double[neurons.length];
+    void backpropagate(double[] expectedOutputs){
         if (nextLayer == null){
             /* na camada de saída,
-             * o erro local de cada neurônio é o erro da saída * a derivada da sigmoid
+             * o erro local de cada neurônio é o output squared error da saída
+             * vezes a derivada da sigmoid em relação a saída
              */
+            System.out.println("---- BACKPROPAGATE ----");
             for (int i = 0; i < neurons.length; i++){
-                errors[i] = outputErrors[i] * neurons[i].sigmoidDerivative();
-                neurons[i].setError(errors[i]);
+                neurons[i].calculateErrorGradients(expectedOutputs[i]);
             }
         }else{
             /* nas camadas ocultas,
              * o erro local de cada neurônio é a soma dos erros dos neurônios da camada seguinte
              * multiplicado pelo peso da conexão entre eles * a derivada da sigmoid
              */
-            for (int i = 0; i < neurons.length; i++){
-                double error = 0.0;
-                for (Neuron nextNeuron : nextLayer.getNeurons()){
-                    error += nextNeuron.getInWeights()[i] * nextNeuron.getError();
-                }
-                error *= neurons[i].sigmoidDerivative();
-                neurons[i].setError(error);
-                errors[i] = error;
-            }
-        }
-        return errors;
-    }
-
-    void updateWeightsAndBiases(double learningRate){
-        /* atualiza os pesos e bias de cada neurônio da camada
-         * com base no learning rate fornecido, no erro calculado no backpropagation
-         * e nos valores de entrada da camada no feedforward
-         */
-        for (Neuron neuron : neurons){
-            for (int i = 0; i < neuron.getInWeights().length; i++){
-                double oldWeight = neuron.getInWeights()[i];
-                double newWeight = oldWeight - learningRate * neuron.getError() * recievedInputs[i];
-                neuron.updateWeight(i, newWeight);
-            }
-            neuron.setBias(neuron.getBias() - learningRate * neuron.getError());
         }
     }
 
-    double[] calculateOutputSquaredErrors(double[] expectedOutputs){
-        this.outputSquaredErrors = new double[expectedOutputs.length];
-        /* calcula o erro quadrático de cada neurônio da camada de saída */
-        for (int i = 0; i < neurons.length; i++){
-            double error = expectedOutputs[i] - neurons[i].getOutput();
-            outputSquaredErrors[i] = Math.pow(error, 2);
-        }
-        return outputSquaredErrors;
-    }
+    // void updateWeightsAndBiases(double learningRate){
+    //     /* atualiza os pesos e bias de cada neurônio da camada
+    //      * com base no learning rate fornecido, no erro calculado no backpropagation
+    //      * e nos valores de entrada da camada no feedforward
+    //      */
+    //     System.out.println("---- UPDATE WEIGHTS AND BIASES ----");
+    //     for (Neuron neuron : neurons){
+    //         for (int i = 0; i < neuron.getInWeights().length; i++){
+    //             double oldWeight = neuron.getInWeights()[i];
+    //             double newWeight = oldWeight - learningRate * neuron.getError() * recievedInputs[i];
+    //             System.out.println("Neuron " + neuron.getNeuronIndex() + " Weight " + i + " old: " + oldWeight + " new: " + newWeight);
+    //             neuron.updateWeight(i, newWeight);
+    //         }
+    //         neuron.setBias(neuron.getBias() - learningRate * neuron.getError());
+    //         System.out.println("Neuron " + neuron.getNeuronIndex() + " Bias: " + neuron.getBias());
+    //     }
+    // }
     
     double[] calculateOutputs(double[] inputs){
         this.recievedInputs = inputs;
@@ -131,13 +113,5 @@ public class Layer{
         }
         sb.append("\n");
         return sb.toString();
-    }
-
-    public void printOutputSquarredErrors(){
-        System.out.println("---- OUTPUT SQUARED ERRORS ----");
-        for (double error : outputSquaredErrors){
-            System.out.println(error);
-        }
-        System.out.println();
     }
 }

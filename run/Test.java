@@ -30,15 +30,16 @@ public class Test{
         int[] layerInfo = {2, 2};
         NeuralNetwork neuralNetwork = new NeuralNetwork(layerInfo);
         neuralNetwork.getLayers()[1].getNeurons()[0].updateWeight(0, 2);
-        neuralNetwork.getLayers()[1].getNeurons()[0].updateWeight(1, 3);
         neuralNetwork.getLayers()[1].getNeurons()[1].updateWeight(0, 4);
-        neuralNetwork.getLayers()[1].getNeurons()[1].updateWeight(1, 5);
+        neuralNetwork.getLayers()[1].getNeurons()[0].updateWeight(1, 2);
+        neuralNetwork.getLayers()[1].getNeurons()[1].updateWeight(1, 20);
 
 
-        double[] inputs = {1, 2};
-        double[] expectedOutputs = {8, 14};
+        double[] inputs = {3, 4};
+        double[] expectedOutputs = {3, 5};
         neuralNetwork.runFeedForward(inputs);
         neuralNetwork.printOutputs();
+        neuralNetwork.runBackpropagation(expectedOutputs, 0.5);
 
     }
 }
