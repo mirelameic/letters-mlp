@@ -27,7 +27,8 @@ public class NeuralNetwork{
     }
 
     private void backpropagation(double[] expectedOutputs, double learningRate){
-        /* calcula o erro na camada de saída,
+        /* calcula o erro quadrático médio,
+         * calcula o erro na camada de saída,
          * propaga o erro de volta para as camadas ocultas
          * e atualiza os pesos e bias em todas as camadas
          */
@@ -36,9 +37,9 @@ public class NeuralNetwork{
             layers[i].backpropagate(expectedOutputs);
         }
         
-        // for (int i = 1; i < layers.length; i++){
-        //     layers[i].updateWeightsAndBiases(learningRate);
-        // }
+        for (int i = 1; i < layers.length; i++){
+            layers[i].updateWeightsAndBiases(learningRate);
+        }
     }
 
     private double[] feedForward(double[] inputs){

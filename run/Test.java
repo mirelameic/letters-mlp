@@ -32,7 +32,7 @@ public class Test{
         neuralNetwork.getLayers()[1].getNeurons()[0].updateWeight(0, 2);
         neuralNetwork.getLayers()[1].getNeurons()[1].updateWeight(0, 4);
         neuralNetwork.getLayers()[1].getNeurons()[0].updateWeight(1, 2);
-        neuralNetwork.getLayers()[1].getNeurons()[1].updateWeight(1, 20);
+        neuralNetwork.getLayers()[1].getNeurons()[1].updateWeight(1, 4);
 
 
         double[] inputs = {3, 4};

@@ -25,40 +25,24 @@ public class Layer{
     }
 
     void backpropagate(double[] expectedOutputs){
+        /* percorre cada neurônio da camada e calcula os gradientes de erro pra todos os pesos */
         if (nextLayer == null){
-            /* na camada de saída,
-             * o erro local de cada neurônio é o output squared error da saída
-             * vezes a derivada da sigmoid em relação a saída
-             */
             System.out.println("---- BACKPROPAGATE ----");
             for (int i = 0; i < neurons.length; i++){
                 neurons[i].calculateErrorGradients(expectedOutputs[i]);
             }
         }else{
-            /* nas camadas ocultas,
-             * o erro local de cada neurônio é a soma dos erros dos neurônios da camada seguinte
-             * multiplicado pelo peso da conexão entre eles * a derivada da sigmoid
-             */
+        
         }
     }
 
-    // void updateWeightsAndBiases(double learningRate){
-    //     /* atualiza os pesos e bias de cada neurônio da camada
-    //      * com base no learning rate fornecido, no erro calculado no backpropagation
-    //      * e nos valores de entrada da camada no feedforward
-    //      */
-    //     System.out.println("---- UPDATE WEIGHTS AND BIASES ----");
-    //     for (Neuron neuron : neurons){
-    //         for (int i = 0; i < neuron.getInWeights().length; i++){
-    //             double oldWeight = neuron.getInWeights()[i];
-    //             double newWeight = oldWeight - learningRate * neuron.getError() * recievedInputs[i];
-    //             System.out.println("Neuron " + neuron.getNeuronIndex() + " Weight " + i + " old: " + oldWeight + " new: " + newWeight);
-    //             neuron.updateWeight(i, newWeight);
-    //         }
-    //         neuron.setBias(neuron.getBias() - learningRate * neuron.getError());
-    //         System.out.println("Neuron " + neuron.getNeuronIndex() + " Bias: " + neuron.getBias());
-    //     }
-    // }
+    void updateWeightsAndBiases(double learningRate){
+        /* percorre cada neurônio da camada e atualiza os pesos e bias */
+        System.out.println("---- UPDATE WEIGHTS AND BIASES ----");
+        for (Neuron neuron : neurons){
+            neuron.updateWeightsAndBias(learningRate);
+        }
+    }
     
     double[] calculateOutputs(double[] inputs){
         this.recievedInputs = inputs;

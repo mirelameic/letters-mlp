@@ -50,26 +50,43 @@ public class Neuron{
         }
     }
 
-    public void calculateErrorGradients(double expectedOutput){
+    void updateWeightsAndBias(double learningRate){
+        for (int i = 0; i < inWeights.length; i++){
+            double newWeight = inWeights[i] - learningRate * errorGradients[i];
+            System.out.println("Neuron " + neuronIndex + " Weight " + i + " old: " + inWeights[i] + " new: " + newWeight);
+            inWeights[i] = newWeight;
+        }
+        //bias?
+    }
+
+    void calculateErrorGradients(double expectedOutput){
+        /* calcula o gradiente de erro para cada peso do neurônio
+         * o gradiente de erro é o erro em relação ao output
+         * multiplicado pela derivada da sigmoid em relação ao output
+         * multiplicado pelo input do peso em questão
+         */
         System.out.println("Neuron " + neuronIndex);
         for(int i = 0; i < inWeights.length; i++){
             this.errorGradients[i] = outputGradient(expectedOutput) * sigmoidDerivative() * inputs[i];
             System.out.println("Error gradient " + i + ": " + errorGradients[i] + " input: " + inputs[i] + " inWeight: " + inWeights[i]);
         }
+        System.out.println();
     }
 
-    /* derivada do erro em relação a saída já calculada */
-    public double outputGradient(double expectedOutput){
+    double outputGradient(double expectedOutput){
+        /* derivada do erro em relação ao output */
+        System.out.println("Output gradient: " + (- (expectedOutput - output)));
         return (- (expectedOutput - output));
     }
 
-    /* derivada da Sigmoid em relação a saída já calculada */
-    public double sigmoidDerivative(){
+    double sigmoidDerivative(){
+        /* derivada da Sigmoid em relação ao output */
+        System.out.println("Sigmoid derivative: " + output * (1 - output));
         return output * (1 - output);
     }
     
-    /* função de ativação Sigmoid */
     double sigmoid(double x){
+        /* função de ativação Sigmoid */
         return 1 / (1 + Math.exp(-x));
     }
 
