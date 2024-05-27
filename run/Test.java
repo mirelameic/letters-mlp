@@ -36,7 +36,7 @@ public class Test{
 
 
         double[] inputs = {3, 4};
-        double[] expectedOutputs = {3, 5};
+        double[] expectedOutputs = {-3, -5};
         neuralNetwork.runFeedForward(inputs);
         neuralNetwork.printOutputs();
         neuralNetwork.runBackpropagation(expectedOutputs, 0.5);

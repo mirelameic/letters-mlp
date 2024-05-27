@@ -4,14 +4,16 @@ public class Neuron{
     private double[] inWeights;
     private double bias;
     private double[] inputs;
+    private double sum;
     private double output;
-    private double[] errorGradients;
+    private double[] delta;
+    private double errorInfo;
     
     public Neuron(int layerIndex, int neuronIndex, int numInputs){
         this.layerIndex = layerIndex;
         this.neuronIndex = neuronIndex;
         this.inWeights = new double[numInputs];
-        this.errorGradients = new double[numInputs];
+        this.delta = new double[numInputs];
         /* caso não seja a camada de entrada,
         * inicializa o neurônio
         * percorre o vetor de pesos de entrada (+ bias)
@@ -44,6 +46,7 @@ public class Neuron{
             for (int i = 0; i < inputs.length; i++){
                 sum += inputs[i] * inWeights[i];
             }
+            this.sum = sum;
             this.output = sigmoid(sum);
             printOutputInfo(sum);
             return output;
@@ -52,25 +55,11 @@ public class Neuron{
 
     void updateWeightsAndBias(double learningRate){
         for (int i = 0; i < inWeights.length; i++){
-            double newWeight = inWeights[i] - learningRate * errorGradients[i];
+            double newWeight = inWeights[i] - learningRate * delta[i];
             System.out.println("Neuron " + neuronIndex + " Weight " + i + " old: " + inWeights[i] + " new: " + newWeight);
             inWeights[i] = newWeight;
         }
-        //bias?
-    }
-
-    void calculateErrorGradients(double expectedOutput){
-        /* calcula o gradiente de erro para cada peso do neurônio
-         * o gradiente de erro é o erro em relação ao output
-         * multiplicado pela derivada da sigmoid em relação ao output
-         * multiplicado pelo input do peso em questão
-         */
-        System.out.println("Neuron " + neuronIndex);
-        for(int i = 0; i < inWeights.length; i++){
-            this.errorGradients[i] = outputGradient(expectedOutput) * sigmoidDerivative() * inputs[i];
-            System.out.println("Error gradient " + i + ": " + errorGradients[i] + " input: " + inputs[i] + " inWeight: " + inWeights[i]);
-        }
-        System.out.println();
+        //TODO: update bias
     }
 
     double outputGradient(double expectedOutput){
@@ -80,9 +69,9 @@ public class Neuron{
     }
 
     double sigmoidDerivative(){
-        /* derivada da Sigmoid em relação ao output */
-        System.out.println("Sigmoid derivative: " + output * (1 - output));
-        return output * (1 - output);
+        /* derivada da Sigmoid em relação ao sum */
+        System.out.println("Sigmoid derivative: " + sum * (1 - sum));
+        return sum * (1 - sum);
     }
     
     double sigmoid(double x){
@@ -110,18 +99,30 @@ public class Neuron{
         this.bias = bias;
     }
 
+    public double[] getInputs(){
+        return inputs;
+    }
+
     public double getOutput(){
         return output;
     }
 
-    public double[] getErrorGradients(){
-        return errorGradients;
+    public double[] getDelta(){
+        return delta;
     }
 
-    public void setErrorGradients(double[] errorGradients){
-        this.errorGradients = errorGradients;
+    public void setDelta(double[] delta){
+        this.delta = delta;
     }
 
+    public void setErrorInfo(double errorInfo){
+        this.errorInfo = errorInfo;
+    }
+
+    public double getErrorInfo(){
+        return errorInfo;
+    }
+    
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();

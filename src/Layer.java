@@ -25,14 +25,40 @@ public class Layer{
     }
 
     void backpropagate(double[] expectedOutputs){
-        /* percorre cada neurônio da camada e calcula os gradientes de erro pra todos os pesos */
         if (nextLayer == null){
+            /* se for a camada de saida, calcula o delta e o termo de erro.
+             * o termo é a derivada do erro em relação ao output
+             * multiplicado pela derivada da sigmoid
+             * e o delta é o termo multiplicado pelo input do peso em questão
+             */
             System.out.println("---- BACKPROPAGATE ----");
             for (int i = 0; i < neurons.length; i++){
-                neurons[i].calculateErrorGradients(expectedOutputs[i]);
+                double[] inWeights = neurons[i].getInWeights();
+                double[] inputs = neurons[i].getInputs();
+                double[] delta = new double[inWeights.length];
+                double[] termo = new double[neurons.length];
+                System.out.println("Neuron " + i);
+                termo[i] = neurons[i].outputGradient(expectedOutputs[i]) * neurons[i].sigmoidDerivative();
+                for(int j = 0; j < inWeights.length; j++){
+                    delta[j] = termo[i] * inputs[j];
+                    System.out.println("Delta " + j + ": " + delta[j] + " input: " + inputs[j] + " inWeight: " + inWeights[j]);
+                    System.out.println();
+                }
+                neurons[i].setErrorInfo(termo[i]);
+                neurons[i].setDelta(delta);
+                System.out.println("Termo: " + termo[i]);
+                System.out.println();
             }
-        }else{
-        
+        }else if(previousLayer != null){
+            Neuron[] nextLayerNeurons = nextLayer.getNeurons();
+            double deltaIn = 0;
+            for(int i = 0; i < neurons.length; i++){
+                for(int j = 0; j < nextLayerNeurons.length; j++){
+                    deltaIn += nextLayerNeurons[j].getErrorInfo() * nextLayerNeurons[j].getInWeights()[i];
+                }
+                double termo = deltaIn * neurons[i].sigmoidDerivative();
+                neurons[i].setErrorInfo(termo);
+            }
         }
     }
 
