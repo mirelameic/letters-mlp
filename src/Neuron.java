@@ -40,7 +40,7 @@ public class Neuron{
          */
         if(layerIndex == 0){
             this.output = inputs[0];
-            printOutputInfo(output);
+            //printOutputInfo(output);
             return output;
         }else{
             for (int i = 0; i < inputs.length; i++){
@@ -48,30 +48,33 @@ public class Neuron{
             }
             this.sum = sum;
             this.output = sigmoid(sum);
-            printOutputInfo(sum);
+            //printOutputInfo(sum);
             return output;
         }
     }
 
     void updateWeightsAndBias(double learningRate){
+        /* o peso novo será:
+         * o peso antigo menos o valor enviado do leraning rate multiplicado pelo delta em relação ao peso */
         for (int i = 0; i < inWeights.length; i++){
             double newWeight = inWeights[i] - learningRate * delta[i];
-            System.out.println("Neuron " + neuronIndex + " Weight " + i + " old: " + inWeights[i] + " new: " + newWeight);
-            inWeights[i] = newWeight;
+            //System.out.println("Neuron " + neuronIndex + " Weight " + i + " old: " + inWeights[i] + " new: " + newWeight);
+            //System.out.println("delta " + i + ": " + delta[i]);
+            this.inWeights[i] = newWeight;
         }
-        //TODO: update bias
+        this.bias = bias - learningRate * errorInfo;
     }
 
     double outputGradient(double expectedOutput){
         /* derivada do erro em relação ao output */
-        System.out.println("Output gradient: " + (- (expectedOutput - output)));
+        //System.out.println("Output gradient: " + (- (expectedOutput - output)));
         return (- (expectedOutput - output));
     }
 
     double sigmoidDerivative(){
-        /* derivada da Sigmoid em relação ao sum */
-        System.out.println("Sigmoid derivative: " + sum * (1 - sum));
-        return sum * (1 - sum);
+        /* derivada da Sigmoid em relação ao output */
+        //System.out.println("Sigmoid derivative: " + output * (1 - output));
+        return output * (1 - output);
     }
     
     double sigmoid(double x){

@@ -68,13 +68,13 @@ public class NeuralNetwork{
         double sumSquaredErrors = 0.0;
         for (int i = 0; i < finalOutputs.length; i++){
             double error = expectedOutputs[i] - finalOutputs[i];
-            System.out.println("Error: " + error);
+            //System.out.println("Error: " + error);
             sumSquaredErrors += Math.pow(error, 2);
-            System.out.println("Sum squared errors: " + sumSquaredErrors);
+            //System.out.println("Sum squared errors: " + sumSquaredErrors);
         }
         this.MSE = sumSquaredErrors / finalOutputs.length;
-        System.out.println("MSE: " + MSE);
-        System.out.println();
+        // System.out.println("MSE: " + MSE);
+        // System.out.println();
     }
 
     public void runBackpropagation(double[] expectedOutputs, double learningRate){

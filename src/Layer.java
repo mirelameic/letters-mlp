@@ -26,45 +26,51 @@ public class Layer{
 
     void backpropagate(double[] expectedOutputs){
         if (nextLayer == null){
-            /* se for a camada de saida, calcula o delta e o termo de erro.
-             * o termo é a derivada do erro em relação ao output
-             * multiplicado pela derivada da sigmoid
-             * e o delta é o termo multiplicado pelo input do peso em questão
+            /* se for a camada de saida,
+             * o termo será a derivada do erro em relação ao output, multiplicado pela derivada da sigmoid
+             * e o delta será o termo multiplicado pelo input do peso em questão (output do neuronio anterior)
              */
-            System.out.println("---- BACKPROPAGATE ----");
             for (int i = 0; i < neurons.length; i++){
                 double[] inWeights = neurons[i].getInWeights();
                 double[] inputs = neurons[i].getInputs();
                 double[] delta = new double[inWeights.length];
                 double[] termo = new double[neurons.length];
-                System.out.println("Neuron " + i);
                 termo[i] = neurons[i].outputGradient(expectedOutputs[i]) * neurons[i].sigmoidDerivative();
                 for(int j = 0; j < inWeights.length; j++){
                     delta[j] = termo[i] * inputs[j];
-                    System.out.println("Delta " + j + ": " + delta[j] + " input: " + inputs[j] + " inWeight: " + inWeights[j]);
-                    System.out.println();
                 }
                 neurons[i].setErrorInfo(termo[i]);
                 neurons[i].setDelta(delta);
-                System.out.println("Termo: " + termo[i]);
-                System.out.println();
             }
         }else if(previousLayer != null){
+            /* se for uma camada oculta,
+             * o auxTermo será a somatória dos termos do neurônios da camada seguinte multiplicados pelo pesos do neuronio atual
+             * o termo será o auxTermo multiplicado pela derivada da sigmoid
+             * e o delta é o termo multiplicado pelo input do peso em questão (output do neuronio anterior)
+             */
             Neuron[] nextLayerNeurons = nextLayer.getNeurons();
-            double deltaIn = 0;
+            double auxTermo = 0;
             for(int i = 0; i < neurons.length; i++){
+                double[] inWeights = neurons[i].getInWeights();
+                double[] inputs = neurons[i].getInputs();
+                double[] delta = new double[inWeights.length];
+                double[] termo = new double[neurons.length];
                 for(int j = 0; j < nextLayerNeurons.length; j++){
-                    deltaIn += nextLayerNeurons[j].getErrorInfo() * nextLayerNeurons[j].getInWeights()[i];
+                    auxTermo += nextLayerNeurons[j].getErrorInfo() * nextLayerNeurons[j].getInWeights()[i];
                 }
-                double termo = deltaIn * neurons[i].sigmoidDerivative();
-                neurons[i].setErrorInfo(termo);
+                termo[i] = auxTermo * neurons[i].sigmoidDerivative();
+                for(int k = 0; k < inWeights.length; k++){
+                    delta[k] = termo[i] * inputs[k];
+                }
+                neurons[i].setErrorInfo(termo[i]);
+                neurons[i].setDelta(delta);
             }
         }
     }
 
     void updateWeightsAndBiases(double learningRate){
         /* percorre cada neurônio da camada e atualiza os pesos e bias */
-        System.out.println("---- UPDATE WEIGHTS AND BIASES ----");
+        //System.out.println("---- UPDATE WEIGHTS AND BIASES ----");
         for (Neuron neuron : neurons){
             neuron.updateWeightsAndBias(learningRate);
         }
