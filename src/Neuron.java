@@ -43,11 +43,16 @@ public class Neuron{
             //printOutputInfo(output);
             return output;
         }else{
+            System.out.println("bias: " + bias);
             for (int i = 0; i < inputs.length; i++){
                 sum += inputs[i] * inWeights[i];
+                System.out.println("input " + i + ": " + inputs[i] + " weight " + i + ": " + inWeights[i]);
             }
             this.sum = sum;
+            System.out.println("sum: " + sum);
             this.output = sigmoid(sum);
+            System.out.println("output: " + output);
+            System.out.println();
             //printOutputInfo(sum);
             return output;
         }
@@ -66,15 +71,15 @@ public class Neuron{
     }
 
     double outputGradient(double expectedOutput){
-        /* derivada do erro em relação ao output */
+        /* valor esperado menos a saída */
         //System.out.println("Output gradient: " + (- (expectedOutput - output)));
-        return (- (expectedOutput - output));
+        return (expectedOutput - output);
     }
 
     double sigmoidDerivative(){
-        /* derivada da Sigmoid em relação ao output */
-        //System.out.println("Sigmoid derivative: " + output * (1 - output));
-        return output * (1 - output);
+        /* derivada da Sigmoid */
+        //System.out.println("Sigmoid derivative: " + sum * (1 - sum));
+        return sigmoid(sum) * (1 - sigmoid(sum));
     }
     
     double sigmoid(double x){
@@ -92,6 +97,10 @@ public class Neuron{
 
     public void updateWeight(int index, double weight){
         this.inWeights[index] = weight;
+    }
+
+    public void updateBias(double bias){
+        this.bias = bias;
     }
 
     public double getBias(){

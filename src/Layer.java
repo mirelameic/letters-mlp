@@ -34,12 +34,13 @@ public class Layer{
                 double[] inWeights = neurons[i].getInWeights();
                 double[] inputs = neurons[i].getInputs();
                 double[] delta = new double[inWeights.length];
-                double[] termo = new double[neurons.length];
-                termo[i] = neurons[i].outputGradient(expectedOutputs[i]) * neurons[i].sigmoidDerivative();
+                double[] errorInfo = new double[neurons.length];
+                errorInfo[i] = neurons[i].outputGradient(expectedOutputs[i]) * neurons[i].sigmoidDerivative();
+                System.out.println("Neuron " + i + " outputGradient: " + neurons[i].outputGradient(expectedOutputs[i]) + " sigmoidDerivative: " + neurons[i].sigmoidDerivative() + " errorInfo: " + errorInfo[i]);
                 for(int j = 0; j < inWeights.length; j++){
-                    delta[j] = termo[i] * inputs[j];
+                    delta[j] = errorInfo[i] * inputs[j];
                 }
-                neurons[i].setErrorInfo(termo[i]);
+                neurons[i].setErrorInfo(errorInfo[i]);
                 neurons[i].setDelta(delta);
             }
         }else if(previousLayer != null){
