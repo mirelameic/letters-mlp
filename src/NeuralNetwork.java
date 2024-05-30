@@ -3,7 +3,7 @@ public class NeuralNetwork{
     private int[] layerInfo;
     private double[] inputs;
     private double[] finalOutputs;
-    double[] outputSquaredErrors;
+    private double[] expectedOutputs;
     double MSE;
 
     public NeuralNetwork(int[] layerInfo){
@@ -22,22 +22,7 @@ public class NeuralNetwork{
             int numNeurons = layerInfo[i];
             int numInputsPerNeuron = (i == 0) ? 1 : layerInfo[i - 1];
             Layer previousLayer = (i == 0) ? null : layers[i - 1];
-            layers[i] = new Layer(i, numNeurons, numInputsPerNeuron, previousLayer, null);
-        }
-    }
-
-    private void backpropagation(double[] expectedOutputs, double learningRate){
-        /* calcula o erro quadrático médio,
-         * calcula o erro na camada de saída,
-         * propaga o erro de volta para as camadas ocultas
-         * e atualiza os pesos e bias em todas as camadas
-         */
-        for (int i = layers.length - 1; i > 0; i--){
-            layers[i].backpropagate(expectedOutputs, learningRate);
-        }
-        
-        for (int i = layers.length - 1; i > 0; i--){
-            layers[i].updateWeightsAndBiases();
+            layers[i] = new Layer(i, numNeurons, numInputsPerNeuron, previousLayer);
         }
     }
 
@@ -53,6 +38,22 @@ public class NeuralNetwork{
         }
         this.finalOutputs = outputs;
         return finalOutputs;
+    }
+
+    private void backpropagation(double[] expectedOutputs, double learningRate){
+        
+        /* calcula o erro quadrático médio,
+         * calcula o erro na camada de saída,
+         * propaga o erro de volta para as camadas ocultas
+         * e atualiza os pesos e bias em todas as camadas
+         */
+        for (int i = layers.length - 1; i > 0; i--){
+            layers[i].backpropagate(expectedOutputs, learningRate);
+        }
+        
+        for (int i = layers.length - 1; i > 0; i--){
+            layers[i].updateWeightsAndBiases();
+        }
     }
     
     void calculateMSE(double[] expectedOutputs){
@@ -76,18 +77,18 @@ public class NeuralNetwork{
         // System.out.println();
     }
 
-    public void runBackpropagation(double[] expectedOutputs, double learningRate){
-        if(expectedOutputs.length != layerInfo[layerInfo.length - 1]){
-            throw new IllegalArgumentException("Number of expected outputs must be equal to number of neurons in output-layer");
-        }
-        backpropagation(expectedOutputs, learningRate);
-    }
-    
     public double[] runFeedForward(double[] inputs){
         if (inputs.length != layerInfo[0]){
             throw new IllegalArgumentException("Number of inputs must be equal to number of neurons in input-layer");
         }
         return feedForward(inputs);
+    }
+
+    public void runBackpropagation(double[] expectedOutputs, double learningRate){
+        if(expectedOutputs.length != layerInfo[layerInfo.length - 1]){
+            throw new IllegalArgumentException("Number of expected outputs must be equal to number of neurons in output-layer");
+        }
+        backpropagation(expectedOutputs, learningRate);
     }
 
     public Layer[] getLayers(){

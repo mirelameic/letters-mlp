@@ -44,16 +44,16 @@ public class Neuron{
             //printOutputInfo(output);
             return output;
         }else{
-            System.out.println("bias: " + bias);
+            // System.out.println("bias: " + bias);
             for (int i = 0; i < inputs.length; i++){
                 sum += inputs[i] * inWeights[i];
-                System.out.println("input " + i + ": " + inputs[i] + " weight " + i + ": " + inWeights[i]);
+                // System.out.println("input " + i + ": " + inputs[i] + " weight " + i + ": " + inWeights[i]);
             }
             this.sum = sum;
-            System.out.println("sum: " + sum);
+            // System.out.println("sum: " + sum);
             this.output = sigmoid(sum);
-            System.out.println("output: " + output);
-            System.out.println();
+            // System.out.println("output: " + output);
+            // System.out.println();
             //printOutputInfo(sum);
             return output;
         }
@@ -65,10 +65,10 @@ public class Neuron{
          */
         for (int i = 0; i < inWeights.length; i++){
             double newWeight = inWeights[i] + delta[i];
-            System.out.println("Neuron " + neuronIndex + " Weight " + i + " old: " + inWeights[i] + " new: " + newWeight);
+            // System.out.println("Neuron " + neuronIndex + " Weight " + i + " old: " + inWeights[i] + " new: " + newWeight);
             this.inWeights[i] = newWeight;
         }
-        System.out.println("Bias old: " + bias + " new: " + (bias + biasDelta));
+        // System.out.println("Bias old: " + bias + " new: " + (bias + biasDelta));
         this.bias = bias + biasDelta;
     }
 
