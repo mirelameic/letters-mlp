@@ -6,8 +6,9 @@ public class Neuron{
     private double[] inputs;
     private double sum;
     private double output;
-    private double[] delta;
     private double errorInfo;
+    private double[] delta;
+    private double biasDelta;
     
     public Neuron(int layerIndex, int neuronIndex, int numInputs){
         this.layerIndex = layerIndex;
@@ -58,16 +59,17 @@ public class Neuron{
         }
     }
 
-    void updateWeightsAndBias(double learningRate){
-        /* o peso novo será:
-         * o peso antigo menos o valor enviado do leraning rate multiplicado pelo delta em relação ao peso */
+    void updateWeightsAndBias(){
+        /* o peso novo será o peso antigo mais o delta relacionado ao peso
+         * o bias novo será o bias antigo mais o biasDelta
+         */
         for (int i = 0; i < inWeights.length; i++){
-            double newWeight = inWeights[i] - learningRate * delta[i];
-            //System.out.println("Neuron " + neuronIndex + " Weight " + i + " old: " + inWeights[i] + " new: " + newWeight);
-            //System.out.println("delta " + i + ": " + delta[i]);
+            double newWeight = inWeights[i] + delta[i];
+            System.out.println("Neuron " + neuronIndex + " Weight " + i + " old: " + inWeights[i] + " new: " + newWeight);
             this.inWeights[i] = newWeight;
         }
-        this.bias = bias - learningRate * errorInfo;
+        System.out.println("Bias old: " + bias + " new: " + (bias + biasDelta));
+        this.bias = bias + biasDelta;
     }
 
     double outputGradient(double expectedOutput){
@@ -125,6 +127,14 @@ public class Neuron{
 
     public void setDelta(double[] delta){
         this.delta = delta;
+    }
+
+    public void setBiasDelta(double biasDelta){
+        this.biasDelta = biasDelta;
+    }
+
+    public double getBiasDelta(){
+        return biasDelta;
     }
 
     public void setErrorInfo(double errorInfo){

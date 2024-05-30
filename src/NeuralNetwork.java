@@ -32,13 +32,12 @@ public class NeuralNetwork{
          * propaga o erro de volta para as camadas ocultas
          * e atualiza os pesos e bias em todas as camadas
          */
-        calculateMSE(expectedOutputs);
         for (int i = layers.length - 1; i > 0; i--){
-            layers[i].backpropagate(expectedOutputs);
+            layers[i].backpropagate(expectedOutputs, learningRate);
         }
         
-        for (int i = 1; i < layers.length; i++){
-            layers[i].updateWeightsAndBiases(learningRate);
+        for (int i = layers.length - 1; i > 0; i--){
+            layers[i].updateWeightsAndBiases();
         }
     }
 
