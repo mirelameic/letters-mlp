@@ -33,13 +33,12 @@ public class Layer{
             for (int i = 0; i < neurons.length; i++){
                 outputs[i] = neurons[i].calculateOutput(new double[]{inputs[i]});
             }
-            return outputs;
         }else{
             for (int i = 0; i < neurons.length; i++){
                 outputs[i] = neurons[i].calculateOutput(inputs);
             }
-            return outputs;
         }
+        return outputs;
     }
 
     void backpropagate(double[] expectedOutputs, double learningRate){
@@ -52,7 +51,6 @@ public class Layer{
              * e o delta será o errorInfo multiplicado pelo leraning rate
              * e pelo input ligado ao peso em questão (output do neurônio anterior)
              */
-            // System.out.println("----CAMADA DE SAIDA----");
             for (int i = 0; i < neurons.length; i++){
                 double[] inWeights = neurons[i].getInWeights();
                 double[] inputs = neurons[i].getInputs();
@@ -60,14 +58,10 @@ public class Layer{
                 double[] delta = new double[inWeights.length];
                 double biasDelta;
                 errorInfo[i] = neurons[i].outputGradient(expectedOutputs[i]) * neurons[i].sigmoidDerivative();
-                // System.out.println("Neuron " + i + " outputGradient: " + neurons[i].outputGradient(expectedOutputs[i]) + " sigmoidDerivative: " + neurons[i].sigmoidDerivative() + " errorInfo: " + errorInfo[i]);
                 for(int j = 0; j < inWeights.length; j++){
                     delta[j] = learningRate * errorInfo[i] * inputs[j];
-                    // System.out.println("Neuron " + i + " delta " + j + ": " + delta[j]);
                 }
                 biasDelta = learningRate * errorInfo[i];
-                // System.out.println("Neuron " + i + " biasDelta: " + biasDelta);
-                // System.out.println();
                 neurons[i].setErrorInfo(errorInfo[i]);
                 neurons[i].setDelta(delta);
                 neurons[i].setBiasDelta(biasDelta);
@@ -79,7 +73,6 @@ public class Layer{
              * e o delta será o errorInfo multiplicado pelo leraning rate
              * e pelo input ligado ao peso em questão (output do neurônio anterior)
              */
-            // System.out.println("----CAMADA OCULTA----");
             Neuron[] nextLayerNeurons = nextLayer.getNeurons();
             for(int i = 0; i < neurons.length; i++){
                 double auxErrorInfo = 0;
@@ -92,16 +85,11 @@ public class Layer{
                 for(int j = 0; j < nextLayerNeurons.length; j++){
                     auxErrorInfo += nextLayerNeurons[j].getErrorInfo() * nextLayerNeurons[j].getInWeights()[i];
                 }
-                // System.out.println("Neuron " + i + " auxErrorInfo: " + auxErrorInfo);
                 errorInfo[i] = auxErrorInfo * neurons[i].sigmoidDerivative();
-                // System.out.println("Neuron " + i + " errorInfo: " + errorInfo[i]);
                 for(int k = 0; k < inWeights.length; k++){
                     delta[k] = learningRate * errorInfo[i] * inputs[k];
-                    // System.out.println("Neuron " + i + " delta " + k + ": " + delta[k]);
                 }
                 biasDelta = learningRate * errorInfo[i];
-                // System.out.println("Neuron " + i + " biasDelta: " + biasDelta);
-                // System.out.println();
                 neurons[i].setErrorInfo(errorInfo[i]);
                 neurons[i].setDelta(delta);
                 neurons[i].setBiasDelta(biasDelta);
@@ -111,7 +99,6 @@ public class Layer{
 
     void updateWeightsAndBiases(){
         /* percorre cada neurônio da camada e atualiza os pesos e bias */
-        // System.out.println("---- UPDATE WEIGHTS AND BIASES ----");
         for (Neuron neuron : neurons){
             neuron.updateWeightsAndBias();
         }

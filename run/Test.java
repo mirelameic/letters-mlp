@@ -6,20 +6,19 @@ public class Test{
         double[] inputs = {0, 1, 0, 0, 0, 1};
         double[] expectedOutputs = {1.0, 0.0};
 
-        double targetMSE = 0; // Define o MSE alvo desejado
-        int maxIterations = 200000; // Define o número máximo de iterações permitidas
+        double targetMSE = 0;
+        int maxIterations = 200000;
 
         int iteration = 0;
         double currentMSE = Double.MAX_VALUE;
 
-        // Loop principal
         while (currentMSE > targetMSE && iteration < maxIterations) {
-            neuralNetwork.runFeedForward(inputs); // Executa o feedforward
-            neuralNetwork.calculateMSE(expectedOutputs); // Calcula o MSE atual
-            currentMSE = neuralNetwork.getMSE(); // Obtém o MSE atual
+            neuralNetwork.runFeedForward(inputs);
+            neuralNetwork.calculateMSE(expectedOutputs);
+            currentMSE = neuralNetwork.getMSE();
             System.out.println("Iteration " + iteration + ", MSE: " + currentMSE);
 
-            neuralNetwork.runBackpropagation(expectedOutputs, 0.01); // Executa a retropropagação
+            neuralNetwork.runBackpropagation(expectedOutputs, 0.01);
 
             iteration++;
         }

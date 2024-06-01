@@ -52,7 +52,7 @@ A classe `Neuron` representa um neurônio da uma rede neural.
   - `inWeights`: Array de pesos de entrada do neurônio.
   - `bias`: Bias do neurônio.
   - `inputs`: Array de inputs do neurônio.
-  - `sum`: Somatória dos inputs pelos respectivos pesos.
+  - `sum`: Somatória dos inputs multiplicados pelos respectivos pesos.
   - `output`: Saída do neurônio após o método `calculateOutput`.
   - `errorInfo`: Informação de erro de cada neurônio com base no expectedOutput.
   - `delta`: Array de deltas relacionado cada peso do neurônio.
