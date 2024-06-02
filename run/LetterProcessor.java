@@ -7,15 +7,25 @@ public class LetterProcessor{
     private int[] layerInfo;
 
     public LetterProcessor(){
+        /* Inicializa a rede neural com 3 camadas:
+         * entrada = 120 neurônios
+         * oculta = 60 neurônios
+         * saída = 26 neurônios
+         */
         this.layerInfo = new int[]{120, 60, 26};
     }
 
     public void runCrossValidation(int[] folds, int testFold){
+        /* Cria uma nova rede neural e realiza a validação cruzada */
         this.neuralNetwork = new NeuralNetwork(this.layerInfo);
         crossValidation(folds, testFold);
     }
 
     private void crossValidation(int[] folds, int testFold){
+        /* Realiza a validação cruzada,
+         * treinando a rede neural e atualizando os pesos
+         * para os folds de treinamento e testando com o fold de teste
+         */
         for (int fold : folds){
             String filePath = setFilePathWithFoldNumber(fold);
             processImages(filePath, false);
@@ -25,6 +35,11 @@ public class LetterProcessor{
     }
 
     private void processImages(String filePath, boolean isTestFold){
+        /* Processa os dados de acordo com o arquivo e a linha do fold
+         * e realiza o treinamento da rede neural,
+         * rodando os métodos feedforward e backpropagation (com exceção do fold de teste)
+         * e calculando o erro médio quadrático
+         */
         if (filePath == null || filePath.isEmpty()){
             System.err.println("File path is not set. Use setFilePathWithFoldNumber() to set the path to the fold file.");
             return;
@@ -54,10 +69,15 @@ public class LetterProcessor{
     }
 
         private String setFilePathWithFoldNumber(int foldNumber){
+            /* Define o caminho do arquivo do fold */
             return System.getProperty("user.dir") + "/data/cross-validation/" + foldNumber + "-fold-x.txt";
         }
         
         private double[] parseInputLine(String line){
+            /* Realiza o parse de cada linha,
+             * separando apenas os valores numéricos
+             * e convertendo-os para double
+             */
             String[] values = line.trim().split(",");
             double[] inputs = new double[values.length];
             for (int i = 0; i < values.length; i++){

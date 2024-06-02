@@ -1,5 +1,9 @@
 public class CrossValidation{
     public static void main(String[] args){
+        /* CrossValidation com 10 folds
+         * onde fold[] é o conjunto de folds de treinamento
+         * e testFold é o fold de teste (que foi excluído do conjunto de treinamento)
+         */
         LetterProcessor letterProcessor = new LetterProcessor();
 
         int[] folds1 = {2, 3, 4, 5, 6, 7, 8, 9, 10};

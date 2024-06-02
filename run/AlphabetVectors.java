@@ -1,4 +1,5 @@
 public class AlphabetVectors{
+    /* Vetores de saída esperada para cada letra do alfabeto */
     public static final double[] A = {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     public static final double[] B = {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     public static final double[] C = {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -26,6 +27,8 @@ public class AlphabetVectors{
     public static final double[] Y = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0};
     public static final double[] Z = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
 
+
+    /* getLetter considerando a numeração das linhas dos arquivos txt */
     public static double[] getLetter(int line){
         switch (line){
             case 1:
@@ -83,6 +86,5 @@ public class AlphabetVectors{
             default:
                 return null;
         }
-
     }
 }
