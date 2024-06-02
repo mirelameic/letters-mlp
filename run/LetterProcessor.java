@@ -15,7 +15,7 @@ public class LetterProcessor{
         crossValidation(folds, testFold);
     }
 
-    private void crossValidation(int folds[], int testFold){
+    private void crossValidation(int[] folds, int testFold){
         for (int fold : folds){
             String filePath = setFilePathWithFoldNumber(fold);
             processImages(filePath, false);
@@ -25,7 +25,7 @@ public class LetterProcessor{
     }
 
     private void processImages(String filePath, boolean isTestFold){
-        if (filePath == null || filePath.isEmpty()) {
+        if (filePath == null || filePath.isEmpty()){
             System.err.println("File path is not set. Use setFilePathWithFoldNumber() to set the path to the fold file.");
             return;
         }
@@ -48,10 +48,10 @@ public class LetterProcessor{
                 System.out.println("MSE: " + currentMSE);
                 linha++;
             }
-            } catch (IOException e){
+        } catch (IOException e){
                 e.printStackTrace();
-            }
         }
+    }
 
         private String setFilePathWithFoldNumber(int foldNumber){
             return System.getProperty("user.dir") + "/data/cross-validation/" + foldNumber + "-fold-x.txt";

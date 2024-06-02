@@ -26,8 +26,8 @@ public class AlphabetVectors{
     public static final double[] Y = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0};
     public static final double[] Z = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
 
-    public static double[] getLetter(int linha){
-        switch (linha){
+    public static double[] getLetter(int line){
+        switch (line){
             case 1:
                 return A;
             case 2:
