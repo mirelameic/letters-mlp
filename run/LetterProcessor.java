@@ -15,6 +15,27 @@ public class LetterProcessor{
         this.layerInfo = new int[]{120, 60, 26};
     }
 
+    public void runNormalValidation(){
+        /* Cria uma nova rede neural e realiza a validação normal */
+        this.neuralNetwork = new NeuralNetwork(this.layerInfo);
+        normalValidation();
+    }
+
+    private void normalValidation(){
+        /* Realiza a validação normal,
+         * treinando a rede neural e atualizando os pesos para os dados de treinamento
+         * e testando com os dados de teste
+         */
+        String trainingFilePath = System.getProperty("user.dir") + "/data/normal-validation/treinamento-x.txt";
+        processImages(trainingFilePath, false);
+
+        String testingFilePath = System.getProperty("user.dir") + "/data/normal-validation/teste-x.txt";
+        processImages(testingFilePath, true);
+
+        String finalTestingFilePath = System.getProperty("user.dir") + "/data/normal-validation/teste-final-x.txt";
+        processImages(finalTestingFilePath, true);
+    }
+
     public void runCrossValidation(int[] folds, int testFold){
         /* Cria uma nova rede neural e realiza a validação cruzada */
         this.neuralNetwork = new NeuralNetwork(this.layerInfo);
@@ -23,8 +44,8 @@ public class LetterProcessor{
 
     private void crossValidation(int[] folds, int testFold){
         /* Realiza a validação cruzada,
-         * treinando a rede neural e atualizando os pesos
-         * para os folds de treinamento e testando com o fold de teste
+         * treinando a rede neural e atualizando os pesos para os folds de treinamento
+         * e testando com o fold de teste
          */
         for (int fold : folds){
             String filePath = setFilePathWithFoldNumber(fold);
