@@ -68,21 +68,21 @@ public class LetterProcessor{
         }
     }
 
-        private String setFilePathWithFoldNumber(int foldNumber){
-            /* Define o caminho do arquivo do fold */
-            return System.getProperty("user.dir") + "/data/cross-validation/" + foldNumber + "-fold-x.txt";
-        }
+    private String setFilePathWithFoldNumber(int foldNumber){
+        /* Define o caminho do arquivo do fold */
+        return System.getProperty("user.dir") + "/data/cross-validation/" + foldNumber + "-fold-x.txt";
+    }
         
-        private double[] parseInputLine(String line){
-            /* Realiza o parse de cada linha,
-             * separando apenas os valores numéricos
-             * e convertendo-os para double
-             */
-            String[] values = line.trim().split(",");
-            double[] inputs = new double[values.length];
-            for (int i = 0; i < values.length; i++){
-                inputs[i] = Double.parseDouble(values[i].trim());
-            }
-            return inputs;
+    private double[] parseInputLine(String line){
+        /* Realiza o parse de cada linha,
+         * separando apenas os valores numéricos
+         * e convertendo-os para double
+        */
+        String[] values = line.trim().split(",");
+        double[] inputs = new double[values.length];
+        for (int i = 0; i < values.length; i++){
+            inputs[i] = Double.parseDouble(values[i].trim());
         }
+        return inputs;
+    }
 }

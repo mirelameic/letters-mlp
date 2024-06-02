@@ -3,6 +3,7 @@ public class CrossValidation{
         /* CrossValidation com 10 folds
          * onde fold[] é o conjunto de folds de treinamento
          * e testFold é o fold de teste (que foi excluído do conjunto de treinamento)
+         * O fold 11 é separado para o teste final
          */
         LetterProcessor letterProcessor = new LetterProcessor();
 
