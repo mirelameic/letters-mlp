@@ -6,8 +6,9 @@ O projeto consiste na implementação de uma rede neural artificial do tipo Mult
 ## Estrutura
 
 - `src`: arquivos .java da estrutura da rede neural.
-- `files`: arquivos que serão usados no treinamento da rede neural.
 - `run`: arquivos .java que processam o treinamento da rede.
+- `files`: arquivos que serão usados no treinamento da rede neural.
+- `data`: arquivos separados e organizados para o treinamento.
 - `bin`: arquivos .class.
 
 ## Classes
