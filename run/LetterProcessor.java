@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class LetterProcessor{
     private NeuralNetwork neuralNetwork;
@@ -27,16 +26,17 @@ public class LetterProcessor{
          * treinando a rede neural e atualizando os pesos para os dados de treinamento
          * e testando com os dados de teste
          */
+        int numTestEntrance = 260;
         String trainingFilePath = System.getProperty("user.dir") + "/data/normal-validation/treinamento-x.txt";
         for(int i=0; i<epocas; i++){
-            processImages(trainingFilePath, false);
+            processImages(trainingFilePath, false, 0);
         }
         
         String testingFilePath = System.getProperty("user.dir") + "/data/normal-validation/teste-x.txt";
-        processImages(testingFilePath, true);
+        processImages(testingFilePath, true, numTestEntrance);
 
-        String finalTestingFilePath = System.getProperty("user.dir") + "/data/normal-validation/teste-final-x.txt";
-        processImages(finalTestingFilePath, true);
+        // String finalTestingFilePath = System.getProperty("user.dir") + "/data/normal-validation/teste-final-x.txt";
+        // processImages(finalTestingFilePath, true, 26);
     }
 
     public void runCrossValidation(int[] folds, int testFold, int epocas){
@@ -50,17 +50,18 @@ public class LetterProcessor{
          * treinando a rede neural e atualizando os pesos para os folds de treinamento
          * e testando com o fold de teste
          */
+        int numTestEntrance = 130;
         for(int i=0; i<epocas; i++){
             for (int fold : folds){
                 String filePath = setFilePathWithFoldNumber(fold);
-                processImages(filePath, false);
+                processImages(filePath, false, 0);
             }
         }
 
-        processImages(setFilePathWithFoldNumber(testFold), true);
+        processImages(setFilePathWithFoldNumber(testFold), true, numTestEntrance);
     }
 
-    private void processImages(String filePath, boolean isTestFold){
+    private void processImages(String filePath, boolean isTestFold, int numTestEntrance){
         /* Processa os dados de acordo com o arquivo e a linha do fold
          * e realiza o treinamento da rede neural,
          * rodando os métodos feedforward e backpropagation (com exceção do fold de teste)
@@ -71,9 +72,9 @@ public class LetterProcessor{
             return;
         }
         int aux=0;
-        char[] expectedResponses = new char[130];
+        char[] expectedResponses = new char[numTestEntrance];
         char actualResponse;
-        char[] finalResponses = new char[130];
+        char[] finalResponses = new char[numTestEntrance];
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))){
             String line;
@@ -114,8 +115,8 @@ public class LetterProcessor{
         }
         
         if(isTestFold){
-            Evaluator.generateConfusionMatrix(finalResponses, expectedResponses);
-            double accuracy = Evaluator.calculateAccuracy();
+            Evaluator.generateConfusionMatrix(finalResponses, expectedResponses, numTestEntrance);
+            double accuracy = Evaluator.calculateAccuracy(numTestEntrance);
             double error = Evaluator.calculateError(accuracy);
 
             System.out.println("Accuracy: " + accuracy + " // error: " + error);
