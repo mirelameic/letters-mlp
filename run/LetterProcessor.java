@@ -114,7 +114,11 @@ public class LetterProcessor{
         }
         
         if(isTestFold){
-            generateConfusionMatrix(finalResponses, expectedResponses);
+            Evaluator.generateConfusionMatrix(finalResponses, expectedResponses);
+            double accuracy = Evaluator.calculateAccuracy();
+            double error = Evaluator.calculateError(accuracy);
+
+            System.out.println("Accuracy: " + accuracy + " // error: " + error);
         }
     }
 
@@ -134,25 +138,6 @@ public class LetterProcessor{
             inputs[i] = Double.parseDouble(values[i].trim());
         }
         return inputs;
-    }
-
-    public void generateConfusionMatrix(char[] finalResponses, char[] expectedResponses){
-        int[][] confusionMatrix = new int[26][26];
-
-        for(int i=0;i<130;i++){
-            int finalResponse = AlphabetVectors.returnLetterNumber(finalResponses[i]);
-            int expectedResponse = AlphabetVectors.returnLetterNumber(expectedResponses[i]);
-            if(finalResponse != -1 && expectedResponse != -1){
-                confusionMatrix[expectedResponse][finalResponse]++;
-            }
-        }
-
-        for(int i=0;i<26;i++){
-            for(int j=0;j<26;j++){
-                System.out.print(confusionMatrix[i][j] + " ");
-            }
-            System.out.println();
-        }
     }
 
     public char findOutResponseLetter(double[] response){

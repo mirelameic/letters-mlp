@@ -288,7 +288,7 @@ public class AlphabetVectors{
             case 'Z':
                 return 25;
             default:
-                return -1; // or some other default value
+                return -1;
 
         }
     }
