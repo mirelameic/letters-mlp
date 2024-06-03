@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class LetterProcessor{
     private NeuralNetwork neuralNetwork;
@@ -69,6 +70,10 @@ public class LetterProcessor{
             System.err.println("File path is not set. Use setFilePathWithFoldNumber() to set the path to the fold file.");
             return;
         }
+        int aux=0;
+        char[] expectedResponses = new char[130];
+        char actualResponse;
+        char[] finalResponses = new char[130];
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))){
             String line;
@@ -80,19 +85,36 @@ public class LetterProcessor{
                 double[] expectedOutputs = AlphabetVectors.getLetter(linha);
                 double[] inputs = parseInputLine(line);
                 double[] outputs = neuralNetwork.runFeedForward(inputs);
-                // for(int i=0; i<outputs.length; i++){
-                //     System.out.println("Expected: " + expectedOutputs[i] + " Output: " + Math.round(outputs[i]));
-                // }
                 if (!isTestFold){
                     neuralNetwork.runBackpropagation(expectedOutputs, 0.5);
+                }
+                else{
+                    double[] response = new double[26];
+                    int index = findMaxIndex(outputs);
+                    for(int i=0; i<outputs.length; i++){
+                        if(i == index){
+                            response[i] = 1;
+                        }
+                        else{
+                            response[i] = 0;
+                        }
+                    }
+                    actualResponse = findOutResponseLetter(response);
+                    expectedResponses[aux] = AlphabetVectors.getExpectedResponse(linha);
+                    finalResponses[aux] = actualResponse;
                 }
                 neuralNetwork.calculateMSE(expectedOutputs);
                 currentMSE = neuralNetwork.getMSE();
                 System.out.println("MSE: " + currentMSE);
                 linha++;
+                aux++;
             }
         } catch (IOException e){
                 e.printStackTrace();
+        }
+        
+        if(isTestFold){
+            generateConfusionMatrix(finalResponses, expectedResponses);
         }
     }
 
@@ -112,5 +134,44 @@ public class LetterProcessor{
             inputs[i] = Double.parseDouble(values[i].trim());
         }
         return inputs;
+    }
+
+    public void generateConfusionMatrix(char[] finalResponses, char[] expectedResponses){
+        int[][] confusionMatrix = new int[26][26];
+
+        for(int i=0;i<130;i++){
+            int finalResponse = AlphabetVectors.returnLetterNumber(finalResponses[i]);
+            int expectedResponse = AlphabetVectors.returnLetterNumber(expectedResponses[i]);
+            if(finalResponse != -1 && expectedResponse != -1){
+                confusionMatrix[expectedResponse][finalResponse]++;
+            }
+        }
+
+        for(int i=0;i<26;i++){
+            for(int j=0;j<26;j++){
+                System.out.print(confusionMatrix[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    public char findOutResponseLetter(double[] response){
+        return AlphabetVectors.decodeResponse(response);
+    }
+
+    public static int findMaxIndex(double[] array){
+        if (array.length == 0) {
+            throw new IllegalArgumentException("O vetor está vazio");
+        }
+        int maxIndex = 0;
+        double max = array[0];
+
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] > max) {
+                max = array[i];
+                maxIndex = i;
+            }
+        }
+        return maxIndex;
     }
 }
