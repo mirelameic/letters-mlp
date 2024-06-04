@@ -1,6 +1,6 @@
 public class Test{
     public static void main(String[] args){
-        /* Teste de uma rede neural com 6 entradas, 5 neurônios na camada oculta e 2 neurônios na camada de saída*/
+        /* teste de uma rede neural com 6 entradas, 5 neurônios na camada oculta e 2 neurônios na camada de saída */
         int[] layerInfo = {6, 5, 2};
         NeuralNetwork neuralNetwork = new NeuralNetwork(layerInfo);
 

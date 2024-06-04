@@ -7,7 +7,7 @@ public class LetterProcessor{
     private int[] layerInfo;
 
     public LetterProcessor(){
-        /* Inicializa a rede neural com 3 camadas:
+        /* inicializa a rede neural com 3 camadas:
          * entrada = 120 neurônios
          * oculta = 60 neurônios
          * saída = 26 neurônios
@@ -16,13 +16,13 @@ public class LetterProcessor{
     }
 
     public void runNormalValidation(int epocas){
-        /* Cria uma nova rede neural e realiza a validação normal */
+        /* cria uma nova rede neural e realiza a validação normal */
         this.neuralNetwork = new NeuralNetwork(this.layerInfo);
         normalValidation(epocas);
     }
 
     private void normalValidation(int epocas){
-        /* Realiza a validação normal por x epocas,
+        /* realiza a validação normal por x epocas,
          * treinando a rede neural e atualizando os pesos para os dados de treinamento
          * e testando com os dados de teste
          */
@@ -35,18 +35,19 @@ public class LetterProcessor{
         String testingFilePath = System.getProperty("user.dir") + "/data/normal-validation/teste-x.txt";
         processImages(testingFilePath, true, numTestEntrance);
 
+        // TODO: remover isso ou fazer algo
         // String finalTestingFilePath = System.getProperty("user.dir") + "/data/normal-validation/teste-final-x.txt";
         // processImages(finalTestingFilePath, true, 26);
     }
 
     public void runCrossValidation(int[] folds, int testFold, int epocas){
-        /* Cria uma nova rede neural e realiza a validação cruzada */
+        /* cria uma nova rede neural e realiza a validação cruzada */
         this.neuralNetwork = new NeuralNetwork(this.layerInfo);
         crossValidation(folds, testFold, epocas);
     }
 
     private void crossValidation(int[] folds, int testFold, int epocas){
-        /* Realiza a validação cruzada por x epocas,
+        /* realiza a validação cruzada por x epocas,
          * treinando a rede neural e atualizando os pesos para os folds de treinamento
          * e testando com o fold de teste
          */
@@ -62,10 +63,11 @@ public class LetterProcessor{
     }
 
     private void processImages(String filePath, boolean isTestFold, int numTestEntrance){
-        /* Processa os dados de acordo com o arquivo e a linha do fold
-         * e realiza o treinamento da rede neural,
-         * rodando os métodos feedforward e backpropagation (com exceção do fold de teste)
-         * e calculando o erro médio quadrático
+        /* processa os dados de acordo com o arquivo e a linha do fold
+         * 1. realiza o treinamento da rede neural:
+         * roda os métodos feedforward e backpropagation (com exceção do fold de teste)
+         * e calcula o erro médio quadrático
+         * 2. calcula e exibe a matriz de confusão caso seja o fold de teste
          */
         if (filePath == null || filePath.isEmpty()){
             System.err.println("File path is not set. Use setFilePathWithFoldNumber() to set the path to the fold file.");
@@ -124,12 +126,12 @@ public class LetterProcessor{
     }
 
     private String setFilePathWithFoldNumber(int foldNumber){
-        /* Define o caminho do arquivo do fold */
+        /* define o caminho do arquivo do fold */
         return System.getProperty("user.dir") + "/data/cross-validation/" + foldNumber + "-fold-x.txt";
     }
         
     private double[] parseInputLine(String line){
-        /* Realiza o parse de cada linha,
+        /* realiza o parse de cada linha,
          * separando apenas os valores numéricos
          * e convertendo-os para double
         */
@@ -146,6 +148,7 @@ public class LetterProcessor{
     }
 
     public static int findMaxIndex(double[] array){
+        /* encontra o índice do maior valor no array */
         if (array.length == 0) {
             throw new IllegalArgumentException("O vetor está vazio");
         }
