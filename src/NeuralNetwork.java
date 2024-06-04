@@ -41,9 +41,7 @@ public class NeuralNetwork{
     }
 
     private void backpropagation(double[] expectedOutputs, double learningRate){
-        
-        /* calcula o erro quadrático médio,
-         * calcula o erro na camada de saída,
+        /* calcula o erro na camada de saída,
          * propaga o erro de volta para as camadas ocultas
          * e atualiza os pesos e bias em todas as camadas
          */

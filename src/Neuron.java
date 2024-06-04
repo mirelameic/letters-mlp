@@ -31,7 +31,7 @@ public class Neuron{
     
     double calculateOutput(double[] inputs){
         this.inputs = inputs;
-        double sum =  this.bias; // somando o bias antes da multiplicação dos pesos
+        this.sum =  this.bias; // somando o bias antes da multiplicação dos pesos
         /* se for a camada de entrada,
          * a saída do neurônio é o input, sem cálculos
          * se não, calcula a saída do neurônio
@@ -43,9 +43,8 @@ public class Neuron{
             this.output = inputs[0];
         }else{
             for (int i = 0; i < inputs.length; i++){
-                sum += inputs[i] * inWeights[i];
+                this.sum += inputs[i] * inWeights[i];
             }
-            this.sum = sum;
             this.output = sigmoid(sum);
         }
         return output;

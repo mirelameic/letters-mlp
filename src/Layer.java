@@ -48,7 +48,7 @@ public class Layer{
         if (nextLayer == null){
             /* se for a camada de saida,
              * a Informação de Erro (errorInfo) será o erro do output multiplicado pela derivada da sigmoid
-             * e o delta será o errorInfo multiplicado pelo leraning rate
+             * e o delta será o errorInfo multiplicado pelo learning rate
              * e pelo input ligado ao peso em questão (output do neurônio anterior)
              */
             for (int i = 0; i < neurons.length; i++){
@@ -70,7 +70,7 @@ public class Layer{
             /* se for uma camada oculta,
              * o auxErrorInfo será a somatória (errorInfo * respectivoPeso) de todos os neuronios da camada seguinte
              * o errorInfo será o auxErrorInfo multiplicado pela derivada da sigmoid
-             * e o delta será o errorInfo multiplicado pelo leraning rate
+             * e o delta será o errorInfo multiplicado pelo learning rate
              * e pelo input ligado ao peso em questão (output do neurônio anterior)
              */
             Neuron[] nextLayerNeurons = nextLayer.getNeurons();

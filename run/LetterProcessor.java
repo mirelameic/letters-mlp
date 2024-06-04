@@ -5,14 +5,17 @@ import java.io.IOException;
 public class LetterProcessor{
     private NeuralNetwork neuralNetwork;
     private int[] layerInfo;
+    private double learningRate;
 
     public LetterProcessor(){
         /* inicializa a rede neural com 3 camadas:
          * entrada = 120 neurônios
          * oculta = 60 neurônios
          * saída = 26 neurônios
+         * e a taxa de aprendizado = 0.5
          */
         this.layerInfo = new int[]{120, 60, 26};
+        this.learningRate = 0.5;
     }
 
     public void runNormalValidation(int epocas){
@@ -89,7 +92,7 @@ public class LetterProcessor{
                 double[] inputs = parseInputLine(line);
                 double[] outputs = neuralNetwork.runFeedForward(inputs);
                 if (!isTestFold){
-                    neuralNetwork.runBackpropagation(expectedOutputs, 0.5);
+                    neuralNetwork.runBackpropagation(expectedOutputs, learningRate);
                 }
                 else{
                     double[] response = new double[26];
