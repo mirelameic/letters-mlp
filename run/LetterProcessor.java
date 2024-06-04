@@ -34,7 +34,7 @@ public class LetterProcessor{
     }
 
     private void normalValidationEarlyStopping(int epocas){
-        /* realiza a validação normal por x epocas,
+        /* realiza a validação normal com parada antecipada por x epocas,
          * treinando a rede neural e atualizando os pesos para os dados de treinamento
          * e testando com os dados de teste
          */
@@ -42,15 +42,18 @@ public class LetterProcessor{
         String trainingFilePath = System.getProperty("user.dir") + "/data/normal-validation/treinamento-x.txt";
         String testingFilePath = System.getProperty("user.dir") + "/data/normal-validation/teste-x.txt";
 
+        /* seta variáveis relacionadas à parada antecipada, realiza o treinamento e o teste
+         * para cada época, calcula a entropia cruzada com os dados reais x preditos,
+         * avalia se o erro está aumentando ou diminuindo e, caso o número de épocas com
+         * entropia aumentando seja maior que a paciência, interrompe o treinamento 
+         */
         double bestValLoss = Double.MAX_VALUE;
         int patience = 100;
         int patienceCounter = 0;
         double[][] emptyMatrix = generateEmptyMatrix();
         for(int i=0; i<epocas; i++){
-            // treinamento da rede neural
             processImages(trainingFilePath, false, 0, "normal-validation-early-stopping-train", false, emptyMatrix, emptyMatrix);
 
-            // avaliação da perda no conjunto de teste
             double[][] validationLabels = new double[numTestEntrance][26];
             double[][] validationPredictions = new double[numTestEntrance][26];
             processImages(testingFilePath, true, numTestEntrance, "normal-validation-early-stopping-test", true, validationLabels, validationPredictions);
@@ -58,15 +61,18 @@ public class LetterProcessor{
             double valLoss = Evaluator.computeCrossEntropyLoss(validationLabels, validationPredictions);
             System.out.println("Epoch " + i + " - Val Loss: " + valLoss);
 
-            // Verificar se a perda de validação atual é melhor do que a melhor perda anterior
+            /* verifica se perda de validação atual é melhor que a anterior,
+             * atualizando a melhor perda em caso positivo ou incrementando o
+             * contador de paciência
+             */
             if (valLoss < bestValLoss) {
-                bestValLoss = valLoss; // Atualizar a melhor perda de validação
-                patienceCounter = 0; // Resetar o contador de paciência
+                bestValLoss = valLoss;
+                patienceCounter = 0;
             } else {
-                patienceCounter++; // Incrementar o contador de paciência
+                patienceCounter++;
             }
 
-            // Parar o treinamento se a perda de validação não melhorar por 'patience' épocas consecutivas
+            // para treinamento se perda não melhorar por 'patience' épocas consecutivas
             if (patienceCounter >= patience) {
                 System.out.println("Early stopping at epoch " + i);
                 break;
@@ -225,6 +231,7 @@ public class LetterProcessor{
     }
 
     public char findOutResponseLetter(double[] response){
+        /* envia a resposta da rede e decodifica para a respectiva letra */
         return AlphabetVectors.decodeResponse(response);
     }
 
@@ -246,6 +253,9 @@ public class LetterProcessor{
     }
 
     public static double[][] generateEmptyMatrix(){
+        /* gera matriz vazia para passar como parâmetro 
+        * caso a validação não seja de parada antecipada 
+        */
         int linhas = 1;
         int colunas = 1;
         double[][] emptyMatrix = new double[linhas][colunas];

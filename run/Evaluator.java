@@ -12,6 +12,7 @@ public class Evaluator{
     }
     
     public static void clearPreviousMatrix(){
+        /* limpa a matriz de confusão */
         for (int i = 0; i<26; i++){
             for (int j = 0; j < 26; j++){
                 confusionMatrix[i][j] = 0;
@@ -22,7 +23,7 @@ public class Evaluator{
     private static void updateConfusionMatrix(char[] finalResponses, char[] expectedResponses, int numTestEntrance){
         /* recebe as respostas finais e as esperadas
          * e atualiza a matriz de confusão
-         * onde a linha é a resposta esperada e a coluna é a resposta final
+         * onde a linha é a resposta real da rede e a coluna é a resposta esperada
          * a matriz é preenchida com a quantidade de vezes que a resposta final foi a resposta esperada
          */
         for (int i = 0; i<numTestEntrance; i++){
@@ -69,7 +70,9 @@ public class Evaluator{
         return 1 - accuracy;
     }
 
-    // Método para calcular a perda de entropia cruzada
+    /* calcula o erro/perda de entropia cruzada com base no retorno real
+     * e no retorno previsto pela rede
+     */
     public static double computeCrossEntropyLoss(double[][] y_true, double[][] y_pred) {
         double loss = 0.0;
         int m = y_true.length;

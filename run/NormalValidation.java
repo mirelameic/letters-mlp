@@ -1,7 +1,8 @@
 public class NormalValidation{
     public static void main(String[] args){
-        /* validação normal com 1000 épocas
-         * (os dados foram divididos em 80% treinamento e 20% teste)
+        /* validação normal e validação normal com parada antecipada, 
+         * ambas com 1000 épocas e divisão dos dados entre
+         * 80% treinamento e 20% teste/validação
          */
         LetterProcessor letterProcessor = new LetterProcessor();
         int epocas = 1000;
