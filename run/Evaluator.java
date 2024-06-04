@@ -68,4 +68,18 @@ public class Evaluator{
         /* o erro é o complemento da acurácia */
         return 1 - accuracy;
     }
+
+    // Método para calcular a perda de entropia cruzada
+    public static double computeCrossEntropyLoss(double[][] y_true, double[][] y_pred) {
+        double loss = 0.0;
+        int m = y_true.length;
+        int n = y_true[0].length;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                loss += -y_true[i][j] * Math.log(y_pred[i][j] + 1e-15);
+            }
+        }
+        return loss / m;
+    }
 }

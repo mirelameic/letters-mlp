@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-confusion_matrix = pd.read_csv("plot/matrix/confusion_matrix_fold-4.csv", header=None)
+confusion_matrix = pd.read_csv("plot/matrix/confusion_matrix_normal-validation-early-stopping-test.csv", header=None)
 
 labels = [chr(i) for i in range(65, 91)]  # A-Z
 

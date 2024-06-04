@@ -6,5 +6,7 @@ public class NormalValidation{
         LetterProcessor letterProcessor = new LetterProcessor();
         int epocas = 1000;
         letterProcessor.runNormalValidation(epocas);
+
+        letterProcessor.runNormalValidationEarlyStopping(epocas);
     }    
 }
