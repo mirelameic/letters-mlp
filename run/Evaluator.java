@@ -6,10 +6,19 @@ public class Evaluator{
 
     public static void generateConfusionMatrix(char[] finalResponses, char[] expectedResponses, int numTestEntrance, String fileNameSuffix){
         /* gera a matriz de confusão */
+        clearPreviousMatrix();
         updateConfusionMatrix(finalResponses, expectedResponses, numTestEntrance);
         printConfusionMatrix(fileNameSuffix);
     }
     
+    public static void clearPreviousMatrix(){
+        for (int i = 0; i<26; i++){
+            for (int j = 0; j < 26; j++){
+                confusionMatrix[i][j] = 0;
+            }
+        }
+    }
+
     private static void updateConfusionMatrix(char[] finalResponses, char[] expectedResponses, int numTestEntrance){
         /* recebe as respostas finais e as esperadas
          * e atualiza a matriz de confusão
@@ -27,6 +36,7 @@ public class Evaluator{
 
     private static void printConfusionMatrix(String fileNameSuffix){
         /* imprime a matriz de confusão no arquivo confusion_matrix_<suffix>.csv */
+        System.out.println("entrou");
         int totalEntries = 0;
         try (FileWriter writer = new FileWriter("plot/matrix/confusion_matrix_" + fileNameSuffix + ".csv")){
             for (int i = 0; i<26; i++){
