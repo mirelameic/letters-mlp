@@ -21,6 +21,12 @@ public class LetterProcessor{
         this.learningRate = 0.5;
     }
 
+    public void runCrossValidation(int[] folds, int testFold, int epocas){
+        /* cria uma nova rede neural e realiza a validação cruzada */
+        this.neuralNetwork = new NeuralNetwork(this.layerInfo);
+        crossValidation(folds, testFold, epocas);
+    }
+
     public void runNormalValidation(int epocas){
         /* cria uma nova rede neural e realiza a validação normal */
         this.neuralNetwork = new NeuralNetwork(this.layerInfo);
@@ -31,6 +37,39 @@ public class LetterProcessor{
         /* cria nova rede neural e realiza validação normal com parada antecipada */
         this.neuralNetwork = new NeuralNetwork(this.layerInfo);
         normalValidationEarlyStopping(epocas);
+    }
+
+    private void crossValidation(int[] folds, int testFold, int epocas){
+        /* realiza a validação cruzada por x epocas,
+         * treinando a rede neural e atualizando os pesos para os folds de treinamento
+         * e testando com o fold de teste
+         */
+        double[][] emptyMatrix = generateEmptyMatrix();
+        int numTestEntrance = 130;
+        for(int i=0; i<epocas; i++){
+            for (int fold : folds){
+                String filePath = setFilePathWithFoldNumber(fold);
+                processImages(filePath, false, 0, "fold-" + fold, false, emptyMatrix, emptyMatrix);
+            }
+        }
+
+        processImages(setFilePathWithFoldNumber(testFold), true, numTestEntrance, "fold-" + testFold, false, emptyMatrix, emptyMatrix);
+    }
+
+    private void normalValidation(int epocas){
+        /* realiza a validação normal por x epocas,
+         * treinando a rede neural e atualizando os pesos para os dados de treinamento
+         * e testando com os dados de teste
+         */
+        double[][] emptyMatrix = generateEmptyMatrix();
+        int numTestEntrance = 260;
+        String trainingFilePath = System.getProperty("user.dir") + "/data/normal-validation/treinamento-x.txt";
+        for(int i=0; i<epocas; i++){
+            processImages(trainingFilePath, false, 0, "normal-validation-train", false, emptyMatrix, emptyMatrix);
+        }
+        
+        String testingFilePath = System.getProperty("user.dir") + "/data/normal-validation/teste-x.txt";
+        processImages(testingFilePath, true, numTestEntrance, "normal-validation-test", false, emptyMatrix, emptyMatrix);
     }
 
     private void normalValidationEarlyStopping(int epocas){
@@ -79,46 +118,6 @@ public class LetterProcessor{
             }
         }
         
-    }
-
-    private void normalValidation(int epocas){
-        /* realiza a validação normal por x epocas,
-         * treinando a rede neural e atualizando os pesos para os dados de treinamento
-         * e testando com os dados de teste
-         */
-
-        double[][] emptyMatrix = generateEmptyMatrix();
-        int numTestEntrance = 260;
-        String trainingFilePath = System.getProperty("user.dir") + "/data/normal-validation/treinamento-x.txt";
-        for(int i=0; i<epocas; i++){
-            processImages(trainingFilePath, false, 0, "normal-validation-train", false, emptyMatrix, emptyMatrix);
-        }
-        
-        String testingFilePath = System.getProperty("user.dir") + "/data/normal-validation/teste-x.txt";
-        processImages(testingFilePath, true, numTestEntrance, "normal-validation-test", false, emptyMatrix, emptyMatrix);
-    }
-
-    public void runCrossValidation(int[] folds, int testFold, int epocas){
-        /* cria uma nova rede neural e realiza a validação cruzada */
-        this.neuralNetwork = new NeuralNetwork(this.layerInfo);
-        crossValidation(folds, testFold, epocas);
-    }
-
-    private void crossValidation(int[] folds, int testFold, int epocas){
-        /* realiza a validação cruzada por x epocas,
-         * treinando a rede neural e atualizando os pesos para os folds de treinamento
-         * e testando com o fold de teste
-         */
-        double[][] emptyMatrix = generateEmptyMatrix();
-        int numTestEntrance = 130;
-        for(int i=0; i<epocas; i++){
-            for (int fold : folds){
-                String filePath = setFilePathWithFoldNumber(fold);
-                processImages(filePath, false, 0, "fold-" + fold, false, emptyMatrix, emptyMatrix);
-            }
-        }
-
-        processImages(setFilePathWithFoldNumber(testFold), true, numTestEntrance, "fold-" + testFold, false, emptyMatrix, emptyMatrix);
     }
 
     private void processImages(String filePath, boolean isTestFold, int numTestEntrance, String fileNameSuffix, boolean isEarlyStopping, double[][] validationLabels, double[][] validationPredictions){
@@ -209,7 +208,7 @@ public class LetterProcessor{
         double accuracy = Evaluator.calculateAccuracy(numTestEntrance);
         double error = Evaluator.calculateError(accuracy);
     
-        System.out.println("Accuracy: " + accuracy + " // error: " + error);
+        System.out.println("Accuracy: " + accuracy + " - Error: " + error);
     }    
 
     private String setFilePathWithFoldNumber(int foldNumber){

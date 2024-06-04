@@ -1,14 +1,15 @@
 # Letters MLP
     Projeto da disciplina de Inteligência Artificial (EACH-USP)
 
-O projeto consiste na implementação de uma rede neural artificial do tipo Multilayer Perceptron (MLP) em Java, sem o uso de bibliotecas especializadas. O objetivo é criar uma estrutura base de MLP capaz de receber imagens de letras, com ou sem ruídos, e identificar qual letra esta sendo enviada.
+O projeto consiste na implementação e treinamento de uma rede neural artificial do tipo Multilayer Perceptron (MLP) em Java, sem o uso de bibliotecas especializadas. O objetivo é criar uma estrutura base de MLP capaz de receber imagens das 26 letras do alfabeto e identificar qual letra está sendo enviada.
 
 ## Estrutura
 
 - `src`: arquivos .java da estrutura da rede neural.
-- `run`: arquivos .java que processam o treinamento da rede.
+- `run`: arquivos .java que processam o treinamento da rede (com e sem Cross Validation e Parada Antecipada).
 - `files`: arquivos que serão usados no treinamento da rede neural.
 - `data`: arquivos separados e organizados para o treinamento.
+- `plot`: arquivos .py que fazem a plotagem dos gráficos da Matriz de Confusão e do MSE.
 - `bin`: arquivos .class.
 
 ## Classes

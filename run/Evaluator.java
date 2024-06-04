@@ -37,7 +37,6 @@ public class Evaluator{
 
     private static void printConfusionMatrix(String fileNameSuffix){
         /* imprime a matriz de confusão no arquivo confusion_matrix_<suffix>.csv */
-        System.out.println("entrou");
         int totalEntries = 0;
         try (FileWriter writer = new FileWriter("plot/matrix/confusion_matrix_" + fileNameSuffix + ".csv")){
             for (int i = 0; i<26; i++){
@@ -70,10 +69,10 @@ public class Evaluator{
         return 1 - accuracy;
     }
 
-    /* calcula o erro/perda de entropia cruzada com base no retorno real
-     * e no retorno previsto pela rede
-     */
     public static double computeCrossEntropyLoss(double[][] y_true, double[][] y_pred) {
+        /* calcula o erro/perda de entropia cruzada com base no retorno real
+         * e no retorno previsto pela rede
+         */
         double loss = 0.0;
         int m = y_true.length;
         int n = y_true[0].length;
