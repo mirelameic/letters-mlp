@@ -151,7 +151,7 @@ public class LetterProcessor{
         double currentMSE = 0;
         String mseFilePath = "plot/mse/mse_values_" + fileNameSuffix + ".csv";
 
-        try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(mseFilePath, true)))){
+        try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(mseFilePath)))){
             while ((line = br.readLine()) != null){
                 linha = linha % 26;
                 linha = linha == 0 ? 26 : linha;

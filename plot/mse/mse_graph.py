@@ -1,7 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-df = pd.read_csv('plot/mse/mse_values.csv')
+df = pd.read_csv('plot/mse/mse_values_fold-1.csv', header=None)
+
+df.columns = ['Iteration', 'MSE']
 
 print(df.columns)
 
