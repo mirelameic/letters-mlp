@@ -42,58 +42,67 @@ public class Layer{
     }
 
     void backpropagate(double[] expectedOutputs, double learningRate){
-        /* o errorInfo será um valor associado a cada neurônio
-         * já o delta será um valor associado a cada peso do neurônio
+        /* se for a camada de saída, chama o backpropagateOutputLayer
+         * se não, chama o backpropagateHiddenLayer
          */
         if (nextLayer == null){
-            /* se for a camada de saida,
-             * a Informação de Erro (errorInfo) será o erro do output multiplicado pela derivada da sigmoid
-             * e o delta será o errorInfo multiplicado pelo learning rate
-             * e pelo input ligado ao peso em questão (output do neurônio anterior)
-             */
-            for (int i = 0; i < neurons.length; i++){
-                double[] inWeights = neurons[i].getInWeights();
-                double[] inputs = neurons[i].getInputs();
-                double[] errorInfo = new double[neurons.length];
-                double[] delta = new double[inWeights.length];
-                double biasDelta;
-                errorInfo[i] = neurons[i].outputGradient(expectedOutputs[i]) * neurons[i].sigmoidDerivative();
-                for(int j = 0; j < inWeights.length; j++){
-                    delta[j] = learningRate * errorInfo[i] * inputs[j];
-                }
-                biasDelta = learningRate * errorInfo[i];
-                neurons[i].setErrorInfo(errorInfo[i]);
-                neurons[i].setDelta(delta);
-                neurons[i].setBiasDelta(biasDelta);
-            }
-        }else if(previousLayer != null){
-            /* se for uma camada oculta,
-             * o auxErrorInfo será a somatória (errorInfo * respectivoPeso) de todos os neuronios da camada seguinte
-             * o errorInfo será o auxErrorInfo multiplicado pela derivada da sigmoid
-             * e o delta será o errorInfo multiplicado pelo learning rate
-             * e pelo input ligado ao peso em questão (output do neurônio anterior)
-             */
-            Neuron[] nextLayerNeurons = nextLayer.getNeurons();
-            for(int i = 0; i < neurons.length; i++){
-                double auxErrorInfo = 0;
-                double[] inWeights = neurons[i].getInWeights();
-                double[] inputs = neurons[i].getInputs();
-                double[] errorInfo = new double[neurons.length];
-                double[] delta = new double[inWeights.length];
-                double biasDelta;
+            backpropagateOutputLayer(expectedOutputs, learningRate);
+        } else if (previousLayer != null){
+            backpropagateHiddenLayer(learningRate);
+        }
+    }
 
-                for(int j = 0; j < nextLayerNeurons.length; j++){
-                    auxErrorInfo += nextLayerNeurons[j].getErrorInfo() * nextLayerNeurons[j].getInWeights()[i];
-                }
-                errorInfo[i] = auxErrorInfo * neurons[i].sigmoidDerivative();
-                for(int k = 0; k < inWeights.length; k++){
-                    delta[k] = learningRate * errorInfo[i] * inputs[k];
-                }
-                biasDelta = learningRate * errorInfo[i];
-                neurons[i].setErrorInfo(errorInfo[i]);
-                neurons[i].setDelta(delta);
-                neurons[i].setBiasDelta(biasDelta);
+    void backpropagateOutputLayer(double[] expectedOutputs, double learningRate){
+        /* se for a camada de saida,
+         * a Informação de Erro (errorInfo) será o erro do output multiplicado pela derivada da sigmoid
+         * e o delta será o errorInfo multiplicado pelo learning rate
+         * e pelo input ligado ao peso em questão (output do neurônio anterior)
+         */
+        for (int i = 0; i < neurons.length; i++){
+            double[] inWeights = neurons[i].getInWeights();
+            double[] inputs = neurons[i].getInputs();
+            double[] errorInfo = new double[neurons.length];
+            double[] delta = new double[inWeights.length];
+            double biasDelta;
+    
+            errorInfo[i] = neurons[i].outputGradient(expectedOutputs[i]) * neurons[i].sigmoidDerivative();
+            for (int j = 0; j < inWeights.length; j++){
+                delta[j] = learningRate * errorInfo[i] * inputs[j];
             }
+            biasDelta = learningRate * errorInfo[i];
+            neurons[i].setErrorInfo(errorInfo[i]);
+            neurons[i].setDelta(delta);
+            neurons[i].setBiasDelta(biasDelta);
+        }
+    }
+    
+    void backpropagateHiddenLayer(double learningRate){
+        /* se for uma camada oculta,
+         * o auxErrorInfo será a somatória (errorInfo * respectivoPeso) de todos os neuronios da camada seguinte
+         * o errorInfo será o auxErrorInfo multiplicado pela derivada da sigmoid
+         * e o delta será o errorInfo multiplicado pelo learning rate
+         * e pelo input ligado ao peso em questão (output do neurônio anterior)
+         */
+        Neuron[] nextLayerNeurons = nextLayer.getNeurons();
+        for (int i = 0; i < neurons.length; i++){
+            double auxErrorInfo = 0;
+            double[] inWeights = neurons[i].getInWeights();
+            double[] inputs = neurons[i].getInputs();
+            double[] errorInfo = new double[neurons.length];
+            double[] delta = new double[inWeights.length];
+            double biasDelta;
+    
+            for (int j = 0; j < nextLayerNeurons.length; j++){
+                auxErrorInfo += nextLayerNeurons[j].getErrorInfo() * nextLayerNeurons[j].getInWeights()[i];
+            }
+            errorInfo[i] = auxErrorInfo * neurons[i].sigmoidDerivative();
+            for (int k = 0; k < inWeights.length; k++){
+                delta[k] = learningRate * errorInfo[i] * inputs[k];
+            }
+            biasDelta = learningRate * errorInfo[i];
+            neurons[i].setErrorInfo(errorInfo[i]);
+            neurons[i].setDelta(delta);
+            neurons[i].setBiasDelta(biasDelta);
         }
     }
 

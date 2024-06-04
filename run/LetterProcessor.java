@@ -1,6 +1,9 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class LetterProcessor{
     private NeuralNetwork neuralNetwork;
@@ -66,67 +69,89 @@ public class LetterProcessor{
     }
 
     private void processImages(String filePath, boolean isTestFold, int numTestEntrance){
-        /* processa os dados de acordo com o arquivo e a linha do fold
-         * 1. realiza o treinamento da rede neural:
-         * roda os métodos feedforward e backpropagation (com exceção do fold de teste)
-         * e calcula o erro médio quadrático
-         * 2. calcula e exibe a matriz de confusão caso seja o fold de teste
+        /* processa as imagens de acordo com o arquivo de entrada
+         * se for um fold de teste, armazena as respostas esperadas e as respostas finais
+         * para gerar a matriz de confusão e calcular a acurácia
          */
         if (filePath == null || filePath.isEmpty()){
             System.err.println("File path is not set. Use setFilePathWithFoldNumber() to set the path to the fold file.");
             return;
         }
-        int aux=0;
+    
         char[] expectedResponses = new char[numTestEntrance];
-        char actualResponse;
         char[] finalResponses = new char[numTestEntrance];
-
+    
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))){
-            String line;
-            int linha = 1;
-            double currentMSE = 0;
+            processLines(br, isTestFold, numTestEntrance, expectedResponses, finalResponses);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    
+        if (isTestFold){
+            evaluateResults(numTestEntrance, expectedResponses, finalResponses);
+        }
+    }
+    
+    private void processLines(BufferedReader br, boolean isTestFold, int numTestEntrance, char[] expectedResponses, char[] finalResponses) throws IOException{
+        /* processa as linhas do arquivo de entrada
+         * se for um fold de teste, armazena as respostas esperadas e as respostas finais
+         * para gerar a matriz de confusão e calcular a acurácia
+         */
+        String line;
+        int linha = 1;
+        int aux = 0;
+        double currentMSE = 0;
+        String mseFilePath = "plot/mse_values.csv";
+
+        try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(mseFilePath, true)))){
             while ((line = br.readLine()) != null){
                 linha = linha % 26;
                 linha = linha == 0 ? 26 : linha;
                 double[] expectedOutputs = AlphabetVectors.getLetter(linha);
                 double[] inputs = parseInputLine(line);
                 double[] outputs = neuralNetwork.runFeedForward(inputs);
+                
                 if (!isTestFold){
                     neuralNetwork.runBackpropagation(expectedOutputs, learningRate);
+                }else{
+                    handleTestFold(outputs, linha, aux, expectedResponses, finalResponses);
                 }
-                else{
-                    double[] response = new double[26];
-                    int index = findMaxIndex(outputs);
-                    for(int i=0; i<outputs.length; i++){
-                        if(i == index){
-                            response[i] = 1;
-                        }
-                        else{
-                            response[i] = 0;
-                        }
-                    }
-                    actualResponse = findOutResponseLetter(response);
-                    expectedResponses[aux] = AlphabetVectors.getExpectedResponse(linha);
-                    finalResponses[aux] = actualResponse;
-                }
+                
                 neuralNetwork.calculateMSE(expectedOutputs);
                 currentMSE = neuralNetwork.getMSE();
-                System.out.println("MSE: " + currentMSE);
+                pw.println(aux + "," + currentMSE);
+                
                 linha++;
                 aux++;
             }
-        } catch (IOException e){
-                e.printStackTrace();
         }
         
-        if(isTestFold){
-            Evaluator.generateConfusionMatrix(finalResponses, expectedResponses, numTestEntrance);
-            double accuracy = Evaluator.calculateAccuracy(numTestEntrance);
-            double error = Evaluator.calculateError(accuracy);
-
-            System.out.println("Accuracy: " + accuracy + " // error: " + error);
-        }
     }
+    
+    private void handleTestFold(double[] outputs, int linha, int aux, char[] expectedResponses, char[] finalResponses){
+        /* armazena as respostas esperadas e as respostas finais
+         * para gerar a matriz de confusão e calcular a acurácia
+         */
+        double[] response = new double[26];
+        int index = findMaxIndex(outputs);
+        
+        for (int i = 0; i<outputs.length; i++){
+            response[i] = (i == index) ? 1 : 0;
+        }
+        
+        char actualResponse = findOutResponseLetter(response);
+        expectedResponses[aux] = AlphabetVectors.getExpectedResponse(linha);
+        finalResponses[aux] = actualResponse;
+    }
+    
+    private void evaluateResults(int numTestEntrance, char[] expectedResponses, char[] finalResponses){
+        /* gera a matriz de confusão e calcula a acurácia */
+        Evaluator.generateConfusionMatrix(finalResponses, expectedResponses, numTestEntrance);
+        double accuracy = Evaluator.calculateAccuracy(numTestEntrance);
+        double error = Evaluator.calculateError(accuracy);
+    
+        System.out.println("Accuracy: " + accuracy + " // error: " + error);
+    }    
 
     private String setFilePathWithFoldNumber(int foldNumber){
         /* define o caminho do arquivo do fold */
