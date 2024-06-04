@@ -43,7 +43,8 @@ public class Layer{
 
     void backpropagate(double[] expectedOutputs, double learningRate){
         /* se for a camada de saída, chama o backpropagateOutputLayer
-         * se não, chama o backpropagateHiddenLayer
+         * se for uma camada oculta, chama o backpropagateHiddenLayer
+         * a camada de entrada não roda o backpropagate
          */
         if (nextLayer == null){
             backpropagateOutputLayer(expectedOutputs, learningRate);

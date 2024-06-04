@@ -35,15 +35,15 @@ public class LetterProcessor{
         int numTestEntrance = 260;
         String trainingFilePath = System.getProperty("user.dir") + "/data/normal-validation/treinamento-x.txt";
         for(int i=0; i<epocas; i++){
-            processImages(trainingFilePath, false, 0);
+            processImages(trainingFilePath, false, 0, "normal-validation-train");
         }
         
         String testingFilePath = System.getProperty("user.dir") + "/data/normal-validation/teste-x.txt";
-        processImages(testingFilePath, true, numTestEntrance);
+        processImages(testingFilePath, true, numTestEntrance, "normal-validation-test");
 
         // TODO: remover isso ou fazer algo
         // String finalTestingFilePath = System.getProperty("user.dir") + "/data/normal-validation/teste-final-x.txt";
-        // processImages(finalTestingFilePath, true, 26);
+        // processImages(finalTestingFilePath, true, 26, "final-validation");
     }
 
     public void runCrossValidation(int[] folds, int testFold, int epocas){
@@ -61,14 +61,14 @@ public class LetterProcessor{
         for(int i=0; i<epocas; i++){
             for (int fold : folds){
                 String filePath = setFilePathWithFoldNumber(fold);
-                processImages(filePath, false, 0);
+                processImages(filePath, false, 0, "fold-" + fold);
             }
         }
 
-        processImages(setFilePathWithFoldNumber(testFold), true, numTestEntrance);
+        processImages(setFilePathWithFoldNumber(testFold), true, numTestEntrance, "fold-" + testFold);
     }
 
-    private void processImages(String filePath, boolean isTestFold, int numTestEntrance){
+    private void processImages(String filePath, boolean isTestFold, int numTestEntrance, String fileNameSuffix){
         /* processa as imagens de acordo com o arquivo de entrada
          * se for um fold de teste, armazena as respostas esperadas e as respostas finais
          * para gerar a matriz de confusão e calcular a acurácia
@@ -82,17 +82,17 @@ public class LetterProcessor{
         char[] finalResponses = new char[numTestEntrance];
     
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))){
-            processLines(br, isTestFold, numTestEntrance, expectedResponses, finalResponses);
+            processLines(br, isTestFold, numTestEntrance, expectedResponses, finalResponses, fileNameSuffix);
         } catch (IOException e){
             e.printStackTrace();
         }
     
         if (isTestFold){
-            evaluateResults(numTestEntrance, expectedResponses, finalResponses);
+            evaluateResults(numTestEntrance, expectedResponses, finalResponses, fileNameSuffix);
         }
     }
     
-    private void processLines(BufferedReader br, boolean isTestFold, int numTestEntrance, char[] expectedResponses, char[] finalResponses) throws IOException{
+    private void processLines(BufferedReader br, boolean isTestFold, int numTestEntrance, char[] expectedResponses, char[] finalResponses, String fileNameSuffix) throws IOException{
         /* processa as linhas do arquivo de entrada
          * se for um fold de teste, armazena as respostas esperadas e as respostas finais
          * para gerar a matriz de confusão e calcular a acurácia
@@ -101,7 +101,7 @@ public class LetterProcessor{
         int linha = 1;
         int aux = 0;
         double currentMSE = 0;
-        String mseFilePath = "plot/mse_values.csv";
+        String mseFilePath = "plot/mse/mse_values_" + fileNameSuffix + ".csv";
 
         try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(mseFilePath, true)))){
             while ((line = br.readLine()) != null){
@@ -144,9 +144,9 @@ public class LetterProcessor{
         finalResponses[aux] = actualResponse;
     }
     
-    private void evaluateResults(int numTestEntrance, char[] expectedResponses, char[] finalResponses){
+    private void evaluateResults(int numTestEntrance, char[] expectedResponses, char[] finalResponses, String fileNameSuffix){
         /* gera a matriz de confusão e calcula a acurácia */
-        Evaluator.generateConfusionMatrix(finalResponses, expectedResponses, numTestEntrance);
+        Evaluator.generateConfusionMatrix(finalResponses, expectedResponses, numTestEntrance, fileNameSuffix);
         double accuracy = Evaluator.calculateAccuracy(numTestEntrance);
         double error = Evaluator.calculateError(accuracy);
     

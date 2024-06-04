@@ -12,9 +12,9 @@ public class CrossValidation{
         int testFold1 = 1;
         letterProcessor.runCrossValidation(folds1, testFold1, epocas);
 
-        // int[] folds2 = {1, 3, 4, 5, 6, 7, 8, 9, 10};
-        // int testFold2 = 2;
-        // letterProcessor.runCrossValidation(folds2, testFold2, epocas);
+        int[] folds2 = {1, 3, 4, 5, 6, 7, 8, 9, 10};
+        int testFold2 = 2;
+        letterProcessor.runCrossValidation(folds2, testFold2, epocas);
 
         // int[] folds3 = {1, 2, 4, 5, 6, 7, 8, 9, 10};
         // int testFold3 = 3;

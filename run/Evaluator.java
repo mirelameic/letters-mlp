@@ -1,13 +1,13 @@
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Evaluator {
+public class Evaluator{
     public static final int[][] confusionMatrix = new int[26][26];
 
-    public static void generateConfusionMatrix(char[] finalResponses, char[] expectedResponses, int numTestEntrance){
+    public static void generateConfusionMatrix(char[] finalResponses, char[] expectedResponses, int numTestEntrance, String fileNameSuffix){
         /* gera a matriz de confusão */
         updateConfusionMatrix(finalResponses, expectedResponses, numTestEntrance);
-        printConfusionMatrix();
+        printConfusionMatrix(fileNameSuffix);
     }
     
     private static void updateConfusionMatrix(char[] finalResponses, char[] expectedResponses, int numTestEntrance){
@@ -25,10 +25,10 @@ public class Evaluator {
         }
     }
 
-    private static void printConfusionMatrix(){
-        /* imprime a matriz de confusão no arquivo confusion_matrix.csv */
+    private static void printConfusionMatrix(String fileNameSuffix){
+        /* imprime a matriz de confusão no arquivo confusion_matrix_<suffix>.csv */
         int totalEntries = 0;
-        try (FileWriter writer = new FileWriter("plot/confusion_matrix.csv")){
+        try (FileWriter writer = new FileWriter("plot/matrix/confusion_matrix_" + fileNameSuffix + ".csv")){
             for (int i = 0; i<26; i++){
                 for (int j = 0; j < 26; j++){
                     writer.append(Integer.toString(confusionMatrix[i][j]));
