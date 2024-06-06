@@ -67,3 +67,13 @@ A classe `Neuron` representa um neurônio da uma rede neural.
   - `double outputGradient(double expectedOutput)`: Calcula o valor esperado - output.
   - `double sigmoidDerivative()`: Calcula da derivada da sigmóide com base no sum.
   - `double sigmoid(double x)`: Função de ativação sigmoidal.
+  
+## Treinamento
+Na pasta `run`, encontra-se as classes que fazem o reconhecimento e processamento dos pixels de cada imagem do alfabeto e também as classem que realizam o treinamento da rede neural. As possibilidades de treinamento são: com e sem Cross-Validation e Parada Antecipada. Ao rodar o treinamento, são gerados arquivos .csv para cada divisão de dados na pasta `plot`, onde também é possível plotar a Matriz de Confusão e os gráficos do MSE/iteração, rodando os aquivos .py.
+
+### Exemplos
+Abaixo é possível visualizar um exemplo de como ficaram os plots para o `fold-7` do treinamento de `Cross-Validation sem parada antecipada` realizado para o projeto.
+
+![Confusion Matrix](plot/matrix/confusion-matrix-fold-7.png)
+
+![Confusion Matrix](plot/mse/mse-graph-fold-7.png)
